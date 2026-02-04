@@ -1,0 +1,302 @@
+{
+  "timestamp": "20260205_005038",
+  "api_url": "http://127.0.0.1:8000/query",
+  "totals": {
+    "n": 10,
+    "ok": 8,
+    "refused": 2,
+    "retrieval_refused": 0,
+    "extractive_refused": 2,
+    "contains_pass": 4,
+    "avg_confidence_ok": 0.21122343054630163
+  },
+  "results": [
+    {
+      "q": "What is APRA and what does it regulate?",
+      "status": "ok",
+      "stage": "extractive",
+      "confidence": 0.20714285714285713,
+      "contains_pass": true,
+      "citations": [
+        {
+          "sentence_index": 1,
+          "evidence_id": "8c6f35929c79a2944b9073c541d97ec71886a060edc10422a9ee99ffbdbd8a32_0007",
+          "source": "https://www.apra.gov.au/",
+          "title": "Welcome to APRA | APRA",
+          "section": null,
+          "page": null,
+          "score": 0.14285714285714285
+        },
+        {
+          "sentence_index": 2,
+          "evidence_id": "dd89cd3c07aa0051a8c18a4c74470c0b3af6fe93f07f3964d2475ef7265e4958_0005",
+          "source": "https://www.apra.gov.au/prudential-policy",
+          "title": "Prudential policy | APRA",
+          "section": null,
+          "page": null,
+          "score": 0.14285714285714285
+        },
+        {
+          "sentence_index": 3,
+          "evidence_id": "dd89cd3c07aa0051a8c18a4c74470c0b3af6fe93f07f3964d2475ef7265e4958_0005",
+          "source": "https://www.apra.gov.au/prudential-policy",
+          "title": "Prudential policy | APRA",
+          "section": null,
+          "page": null,
+          "score": 0.09090909090909091
+        }
+      ],
+      "evidence_count": 2
+    },
+    {
+      "q": "What is AUSTRAC responsible for?",
+      "status": "ok",
+      "stage": "extractive",
+      "confidence": 0.23043478260869565,
+      "contains_pass": false,
+      "citations": [
+        {
+          "sentence_index": 1,
+          "evidence_id": "7eb031081f3b11fe14465ec23dd3b4bf0dc23e1294c28f26dbf08dfc7d5ef7ef_0014",
+          "source": "https://www.austrac.gov.au/business/your-industry/not-profits",
+          "title": "Not for profits | AUSTRAC",
+          "section": null,
+          "page": null,
+          "score": 0.17391304347826086
+        },
+        {
+          "sentence_index": 2,
+          "evidence_id": "997f839cb35a2801d522c179b88d3cd450b940df3f5b138f339d8caf3c143e2e_0018",
+          "source": "https://www.austrac.gov.au/business",
+          "title": "Business | AUSTRAC",
+          "section": null,
+          "page": null,
+          "score": 0.11627906976744186
+        },
+        {
+          "sentence_index": 3,
+          "evidence_id": "997f839cb35a2801d522c179b88d3cd450b940df3f5b138f339d8caf3c143e2e_0018",
+          "source": "https://www.austrac.gov.au/business",
+          "title": "Business | AUSTRAC",
+          "section": null,
+          "page": null,
+          "score": 0.1
+        }
+      ],
+      "evidence_count": 2
+    },
+    {
+      "q": "What is a suspicious matter report?",
+      "status": "ok",
+      "stage": "extractive",
+      "confidence": 0.16842105263157894,
+      "contains_pass": true,
+      "citations": [
+        {
+          "sentence_index": 1,
+          "evidence_id": "e006fe1c27d036ab691d7a3a4d5c62bf8f4836423d6655a81d91f18877a1b2e1_0014",
+          "source": "https://www.austrac.gov.au/business/new-to-austrac/your-obligations",
+          "title": "Your obligations | AUSTRAC",
+          "section": null,
+          "page": null,
+          "score": 0.15789473684210525
+        },
+        {
+          "sentence_index": 2,
+          "evidence_id": "e006fe1c27d036ab691d7a3a4d5c62bf8f4836423d6655a81d91f18877a1b2e1_0014",
+          "source": "https://www.austrac.gov.au/business/new-to-austrac/your-obligations",
+          "title": "Your obligations | AUSTRAC",
+          "section": null,
+          "page": null,
+          "score": 0.09090909090909091
+        },
+        {
+          "sentence_index": 3,
+          "evidence_id": "e006fe1c27d036ab691d7a3a4d5c62bf8f4836423d6655a81d91f18877a1b2e1_0014",
+          "source": "https://www.austrac.gov.au/business/new-to-austrac/your-obligations",
+          "title": "Your obligations | AUSTRAC",
+          "section": null,
+          "page": null,
+          "score": 0.08695652173913043
+        }
+      ],
+      "evidence_count": 1
+    },
+    {
+      "q": "Define model risk management in a regulated context.",
+      "status": "ok",
+      "stage": "extractive",
+      "confidence": 0.2823529411764706,
+      "contains_pass": false,
+      "citations": [
+        {
+          "sentence_index": 1,
+          "evidence_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0018",
+          "source": "https://www.apra.gov.au/industries/1/standards",
+          "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+          "section": null,
+          "page": null,
+          "score": 0.17647058823529413
+        },
+        {
+          "sentence_index": 2,
+          "evidence_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0018",
+          "source": "https://www.apra.gov.au/industries/2/standards",
+          "title": "Prudential and Reporting Standards for General insurance | APRA",
+          "section": null,
+          "page": null,
+          "score": 0.12
+        },
+        {
+          "sentence_index": 3,
+          "evidence_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0012",
+          "source": "https://www.apra.gov.au/industries/2/standards",
+          "title": "Prudential and Reporting Standards for General insurance | APRA",
+          "section": null,
+          "page": null,
+          "score": 0.11764705882352941
+        }
+      ],
+      "evidence_count": 3
+    },
+    {
+      "q": "What is record-keeping in AML/CTF obligations?",
+      "status": "refused",
+      "stage": "extractive",
+      "confidence": 0.0,
+      "contains_pass": false,
+      "citations": [],
+      "evidence_count": 5
+    },
+    {
+      "q": "What is KYC and why is it required?",
+      "status": "refused",
+      "stage": "extractive",
+      "confidence": 0.0,
+      "contains_pass": false,
+      "citations": [],
+      "evidence_count": 5
+    },
+    {
+      "q": "What is due diligence in AML programs?",
+      "status": "ok",
+      "stage": "extractive",
+      "confidence": 0.240625,
+      "contains_pass": true,
+      "citations": [
+        {
+          "sentence_index": 1,
+          "evidence_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0016",
+          "source": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs",
+          "title": "AML/CTF programs | AUSTRAC",
+          "section": null,
+          "page": null,
+          "score": 0.1875
+        },
+        {
+          "sentence_index": 2,
+          "evidence_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0017",
+          "source": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs",
+          "title": "AML/CTF programs | AUSTRAC",
+          "section": null,
+          "page": null,
+          "score": 0.15384615384615385
+        },
+        {
+          "sentence_index": 3,
+          "evidence_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0017",
+          "source": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs",
+          "title": "AML/CTF programs | AUSTRAC",
+          "section": null,
+          "page": null,
+          "score": 0.1111111111111111
+        }
+      ],
+      "evidence_count": 2
+    },
+    {
+      "q": "What is a risk assessment requirement in compliance programs?",
+      "status": "ok",
+      "stage": "extractive",
+      "confidence": 0.24285714285714285,
+      "contains_pass": true,
+      "citations": [
+        {
+          "sentence_index": 1,
+          "evidence_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0015",
+          "source": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs",
+          "title": "AML/CTF programs | AUSTRAC",
+          "section": null,
+          "page": null,
+          "score": 0.19047619047619047
+        },
+        {
+          "sentence_index": 2,
+          "evidence_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0012",
+          "source": "https://www.apra.gov.au/industries/2/standards",
+          "title": "Prudential and Reporting Standards for General insurance | APRA",
+          "section": null,
+          "page": null,
+          "score": 0.08695652173913043
+        }
+      ],
+      "evidence_count": 2
+    },
+    {
+      "q": "What is the purpose of internal controls in compliance?",
+      "status": "ok",
+      "stage": "extractive",
+      "confidence": 0.20714285714285713,
+      "contains_pass": false,
+      "citations": [
+        {
+          "sentence_index": 1,
+          "evidence_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0015",
+          "source": "https://www.apra.gov.au/industries/2/standards",
+          "title": "Prudential and Reporting Standards for General insurance | APRA",
+          "section": null,
+          "page": null,
+          "score": 0.14285714285714285
+        },
+        {
+          "sentence_index": 2,
+          "evidence_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0015",
+          "source": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs",
+          "title": "AML/CTF programs | AUSTRAC",
+          "section": null,
+          "page": null,
+          "score": 0.1111111111111111
+        },
+        {
+          "sentence_index": 3,
+          "evidence_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0015",
+          "source": "https://www.apra.gov.au/industries/2/standards",
+          "title": "Prudential and Reporting Standards for General insurance | APRA",
+          "section": null,
+          "page": null,
+          "score": 0.09302325581395349
+        }
+      ],
+      "evidence_count": 2
+    },
+    {
+      "q": "What does 'fail-closed' mean in a regulatory RAG system?",
+      "status": "ok",
+      "stage": "extractive",
+      "confidence": 0.11081081081081082,
+      "contains_pass": false,
+      "citations": [
+        {
+          "sentence_index": 1,
+          "evidence_id": "87b4d0e90206036cbacdbb1800c2d424fe70a9e0e7adca08c92b9ef6c1c42fff_0015",
+          "source": "https://www.apra.gov.au/consultations/1",
+          "title": "Consultations for Authorised deposit-taking institutions | APRA",
+          "section": null,
+          "page": null,
+          "score": 0.08108108108108109
+        }
+      ],
+      "evidence_count": 1
+    }
+  ]
+}
