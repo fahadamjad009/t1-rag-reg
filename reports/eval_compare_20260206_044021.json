@@ -1,0 +1,619 @@
+{
+  "ts": "2026-02-06 04:40:16",
+  "top_k": 5,
+  "questions": 10,
+  "modes": {
+    "vector": {
+      "recall@k": 0.8,
+      "mrr@k": 0.6533333333333333,
+      "ndcg@k": 0.6869744889191229,
+      "confidence_pass_rate": 1.0,
+      "per_question": [
+        {
+          "id": "q001",
+          "q": "What is APRA and what does it regulate?",
+          "mode": "vector",
+          "best_score": 0.5837758779525757,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "APRA",
+            "prudential"
+          ],
+          "rels": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "vector",
+              "score": 0.5837758779525757,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0002",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 2,
+              "retriever": "vector",
+              "score": 0.5776079893112183,
+              "chunk_id": "8c6f35929c79a2944b9073c541d97ec71886a060edc10422a9ee99ffbdbd8a32_0007",
+              "title": "Welcome to APRA | APRA",
+              "url": "https://www.apra.gov.au/"
+            },
+            {
+              "rank": 3,
+              "retriever": "vector",
+              "score": 0.5546236038208008,
+              "chunk_id": "dd89cd3c07aa0051a8c18a4c74470c0b3af6fe93f07f3964d2475ef7265e4958_0005",
+              "title": "Prudential policy | APRA",
+              "url": "https://www.apra.gov.au/prudential-policy"
+            },
+            {
+              "rank": 4,
+              "retriever": "vector",
+              "score": 0.5542171001434326,
+              "chunk_id": "97d4e38eaaf08b6b076af13e9098fb2bc344d28d647d7b826163e0a54a5eba0d_0008",
+              "title": "Financial Claims Scheme for authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/financial-claims-scheme-for-authorised-deposit-taking-institutions"
+            },
+            {
+              "rank": 5,
+              "retriever": "vector",
+              "score": 0.551807165145874,
+              "chunk_id": "7c7448d6285b618d468252ac461f232e83580e59d99b5b67b90a5f2f8c981a7f_0002",
+              "title": "Legislation, determinations and consent orders for authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/legislation-determinations-and-consent-orders-for-authorised-deposit-taking-institutions"
+            }
+          ]
+        },
+        {
+          "id": "q002",
+          "q": "What is AUSTRAC responsible for?",
+          "mode": "vector",
+          "best_score": 0.7148327827453613,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "money",
+            "laundering"
+          ],
+          "rels": [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "vector",
+              "score": 0.7148327827453613,
+              "chunk_id": "997f839cb35a2801d522c179b88d3cd450b940df3f5b138f339d8caf3c143e2e_0018",
+              "title": "Business | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business"
+            },
+            {
+              "rank": 2,
+              "retriever": "vector",
+              "score": 0.6608341336250305,
+              "chunk_id": "ac96868cc9beac3185ac2a8fa3d25adbbc17ee15b423cf46cefbf2252c1ed6e7_0023",
+              "title": "The geographical link requirement | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/geographical-link-requirement"
+            },
+            {
+              "rank": 3,
+              "retriever": "vector",
+              "score": 0.6586127281188965,
+              "chunk_id": "7eb031081f3b11fe14465ec23dd3b4bf0dc23e1294c28f26dbf08dfc7d5ef7ef_0014",
+              "title": "Not for profits | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/not-profits"
+            },
+            {
+              "rank": 4,
+              "retriever": "vector",
+              "score": 0.643557608127594,
+              "chunk_id": "f6600aca16dfdb90ef1ce428d53d8aedba210e323b5ecf3560830b27eae986a6_0019",
+              "title": "E-learning | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/e-learning"
+            },
+            {
+              "rank": 5,
+              "retriever": "vector",
+              "score": 0.6434799432754517,
+              "chunk_id": "5cfc1137c362983aec1877ad1902d60f248a6d99d25728d3ea7d1f810a385720_0012",
+              "title": "Who and what we regulate | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/who-and-what-we-regulate"
+            }
+          ]
+        },
+        {
+          "id": "q003",
+          "q": "What is a suspicious matter report?",
+          "mode": "vector",
+          "best_score": 0.4195954203605652,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "report"
+          ],
+          "rels": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "vector",
+              "score": 0.4195954203605652,
+              "chunk_id": "e006fe1c27d036ab691d7a3a4d5c62bf8f4836423d6655a81d91f18877a1b2e1_0014",
+              "title": "Your obligations | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/your-obligations"
+            },
+            {
+              "rank": 2,
+              "retriever": "vector",
+              "score": 0.38196468353271484,
+              "chunk_id": "7eb031081f3b11fe14465ec23dd3b4bf0dc23e1294c28f26dbf08dfc7d5ef7ef_0008",
+              "title": "Not for profits | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/not-profits"
+            },
+            {
+              "rank": 3,
+              "retriever": "vector",
+              "score": 0.38196468353271484,
+              "chunk_id": "41b4607631e0adfa51c993bbc79e4006fca7ecb140e93a5f881beb73af9dc8d2_0008",
+              "title": "Remittance service providers | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/remittance-service-providers"
+            },
+            {
+              "rank": 4,
+              "retriever": "vector",
+              "score": 0.38196468353271484,
+              "chunk_id": "399a1a65650c9027ac3ca121b0e9afe8f4704ad859007a9ee3824272aa95e404_0008",
+              "title": "Enrol or register | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/enrol-or-register"
+            },
+            {
+              "rank": 5,
+              "retriever": "vector",
+              "score": 0.38196468353271484,
+              "chunk_id": "1fe83231fcf0ea634d788f6e15749b1fa5edab1d17093dd0ea421e84c91541e3_0008",
+              "title": "Financial service providers | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/financial-service-providers"
+            }
+          ]
+        },
+        {
+          "id": "q004",
+          "q": "Define model risk management in a regulated context.",
+          "mode": "vector",
+          "best_score": 0.49087002873420715,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "model",
+            "risk"
+          ],
+          "rels": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "vector",
+              "score": 0.49087002873420715,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0015",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 2,
+              "retriever": "vector",
+              "score": 0.46553558111190796,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0010",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 3,
+              "retriever": "vector",
+              "score": 0.4420342445373535,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0018",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 4,
+              "retriever": "vector",
+              "score": 0.4246025085449219,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0012",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 5,
+              "retriever": "vector",
+              "score": 0.4155653715133667,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0018",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            }
+          ]
+        },
+        {
+          "id": "q005",
+          "q": "What is record-keeping in AML/CTF obligations?",
+          "mode": "vector",
+          "best_score": 0.4909275472164154,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "record"
+          ],
+          "rels": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "vector",
+              "score": 0.4909275472164154,
+              "chunk_id": "f6600aca16dfdb90ef1ce428d53d8aedba210e323b5ecf3560830b27eae986a6_0006",
+              "title": "E-learning | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/e-learning"
+            },
+            {
+              "rank": 2,
+              "retriever": "vector",
+              "score": 0.4909275472164154,
+              "chunk_id": "b7b01c408bf4c32f023c6cbce7449f640058c79dd7e519d495816e9a268c2af3_0006",
+              "title": "Homepage | AUSTRAC",
+              "url": "https://www.austrac.gov.au/"
+            },
+            {
+              "rank": 3,
+              "retriever": "vector",
+              "score": 0.4909275472164154,
+              "chunk_id": "997f839cb35a2801d522c179b88d3cd450b940df3f5b138f339d8caf3c143e2e_0006",
+              "title": "Business | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business"
+            },
+            {
+              "rank": 4,
+              "retriever": "vector",
+              "score": 0.4909275472164154,
+              "chunk_id": "7c50829745736ebbadc4cce31b63962de8a4c1e6ed92669586f8183e6b334fa9_0006",
+              "title": "Banking | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/banking"
+            },
+            {
+              "rank": 5,
+              "retriever": "vector",
+              "score": 0.4909275472164154,
+              "chunk_id": "27d894020af9de9c8b984df174950bbadcf7e88134350acf8f5752c23b78ca76_0006",
+              "title": "Casinos | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/casinos"
+            }
+          ]
+        },
+        {
+          "id": "q006",
+          "q": "What is KYC and why is it required?",
+          "mode": "vector",
+          "best_score": 0.4427352845668793,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "customer"
+          ],
+          "rels": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "vector",
+              "score": 0.4427352845668793,
+              "chunk_id": "e006fe1c27d036ab691d7a3a4d5c62bf8f4836423d6655a81d91f18877a1b2e1_0017",
+              "title": "Your obligations | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/your-obligations"
+            },
+            {
+              "rank": 2,
+              "retriever": "vector",
+              "score": 0.42320647835731506,
+              "chunk_id": "a1de58adb4edcc176763e6df7ebb0e674b67cf2d3f01e7b16c85197130a37b86_0000",
+              "title": "AUSTRAC InBrief | AUSTRAC",
+              "url": "https://www.austrac.gov.au/news-and-media/austrac-inbrief/form"
+            },
+            {
+              "rank": 3,
+              "retriever": "vector",
+              "score": 0.42243021726608276,
+              "chunk_id": "5cfc1137c362983aec1877ad1902d60f248a6d99d25728d3ea7d1f810a385720_0020",
+              "title": "Who and what we regulate | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/who-and-what-we-regulate"
+            },
+            {
+              "rank": 4,
+              "retriever": "vector",
+              "score": 0.4224056005477905,
+              "chunk_id": "5cfc1137c362983aec1877ad1902d60f248a6d99d25728d3ea7d1f810a385720_0000",
+              "title": "Who and what we regulate | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/who-and-what-we-regulate"
+            },
+            {
+              "rank": 5,
+              "retriever": "vector",
+              "score": 0.4155924916267395,
+              "chunk_id": "0bea3f41cb1a55faa9718fb88ec1ade3946da92f35aeadb0b51ff7d70c996964_0000",
+              "title": "Check if you need to enrol or register | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/check-if-you-need-enrol-or-register"
+            }
+          ]
+        },
+        {
+          "id": "q007",
+          "q": "What is due diligence in AML programs?",
+          "mode": "vector",
+          "best_score": 0.5532230138778687,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "due"
+          ],
+          "rels": [
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "vector",
+              "score": 0.5532230138778687,
+              "chunk_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0015",
+              "title": "AML/CTF programs | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs"
+            },
+            {
+              "rank": 2,
+              "retriever": "vector",
+              "score": 0.4434543251991272,
+              "chunk_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0016",
+              "title": "AML/CTF programs | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs"
+            },
+            {
+              "rank": 3,
+              "retriever": "vector",
+              "score": 0.426361083984375,
+              "chunk_id": "f6600aca16dfdb90ef1ce428d53d8aedba210e323b5ecf3560830b27eae986a6_0013",
+              "title": "E-learning | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/e-learning"
+            },
+            {
+              "rank": 4,
+              "retriever": "vector",
+              "score": 0.41252583265304565,
+              "chunk_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0017",
+              "title": "AML/CTF programs | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs"
+            },
+            {
+              "rank": 5,
+              "retriever": "vector",
+              "score": 0.4045565128326416,
+              "chunk_id": "5cfc1137c362983aec1877ad1902d60f248a6d99d25728d3ea7d1f810a385720_0006",
+              "title": "Who and what we regulate | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/who-and-what-we-regulate"
+            }
+          ]
+        },
+        {
+          "id": "q008",
+          "q": "What is a risk assessment requirement in compliance programs?",
+          "mode": "vector",
+          "best_score": 0.5926802158355713,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "risk"
+          ],
+          "rels": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "vector",
+              "score": 0.5926802158355713,
+              "chunk_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0015",
+              "title": "AML/CTF programs | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs"
+            },
+            {
+              "rank": 2,
+              "retriever": "vector",
+              "score": 0.5507473349571228,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0026",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 3,
+              "retriever": "vector",
+              "score": 0.5484282970428467,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0010",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 4,
+              "retriever": "vector",
+              "score": 0.5419176816940308,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0012",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 5,
+              "retriever": "vector",
+              "score": 0.5327739119529724,
+              "chunk_id": "5cfc1137c362983aec1877ad1902d60f248a6d99d25728d3ea7d1f810a385720_0001",
+              "title": "Who and what we regulate | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/who-and-what-we-regulate"
+            }
+          ]
+        },
+        {
+          "id": "q009",
+          "q": "What is the purpose of internal controls in compliance?",
+          "mode": "vector",
+          "best_score": 0.40191322565078735,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "control"
+          ],
+          "rels": [
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "vector",
+              "score": 0.40191322565078735,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0015",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 2,
+              "retriever": "vector",
+              "score": 0.37608635425567627,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0017",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 3,
+              "retriever": "vector",
+              "score": 0.36502838134765625,
+              "chunk_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0015",
+              "title": "AML/CTF programs | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs"
+            },
+            {
+              "rank": 4,
+              "retriever": "vector",
+              "score": 0.35404396057128906,
+              "chunk_id": "5cfc1137c362983aec1877ad1902d60f248a6d99d25728d3ea7d1f810a385720_0001",
+              "title": "Who and what we regulate | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/who-and-what-we-regulate"
+            },
+            {
+              "rank": 5,
+              "retriever": "vector",
+              "score": 0.34953728318214417,
+              "chunk_id": "ac96868cc9beac3185ac2a8fa3d25adbbc17ee15b423cf46cefbf2252c1ed6e7_0001",
+              "title": "The geographical link requirement | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/geographical-link-requirement"
+            }
+          ]
+        },
+        {
+          "id": "q010",
+          "q": "What does 'fail-closed' mean in a regulatory RAG system?",
+          "mode": "vector",
+          "best_score": 0.3341912031173706,
+          "min_confidence": 0.0,
+          "confidence_pass": true,
+          "expected_contains": [
+            "insufficient",
+            "evidence"
+          ],
+          "rels": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "vector",
+              "score": 0.3341912031173706,
+              "chunk_id": "87b4d0e90206036cbacdbb1800c2d424fe70a9e0e7adca08c92b9ef6c1c42fff_0010",
+              "title": "Consultations for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/consultations/1"
+            },
+            {
+              "rank": 2,
+              "retriever": "vector",
+              "score": 0.318949431180954,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0015",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 3,
+              "retriever": "vector",
+              "score": 0.3118129074573517,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0040",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 4,
+              "retriever": "vector",
+              "score": 0.3044411838054657,
+              "chunk_id": "87b4d0e90206036cbacdbb1800c2d424fe70a9e0e7adca08c92b9ef6c1c42fff_0006",
+              "title": "Consultations for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/consultations/1"
+            },
+            {
+              "rank": 5,
+              "retriever": "vector",
+              "score": 0.30311188101768494,
+              "chunk_id": "87b4d0e90206036cbacdbb1800c2d424fe70a9e0e7adca08c92b9ef6c1c42fff_0015",
+              "title": "Consultations for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/consultations/1"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -5,6 +5,8 @@ import re
 from dataclasses import dataclass
 from typing import Any, Dict, List, Tuple
 
+from .retriever import retrieve
+
 
 @dataclass
 class ExtractiveAnswer:
@@ -54,22 +56,31 @@ def normalize_hit(hit: Dict[str, Any], i: int) -> Dict[str, Any]:
     """
     meta = hit.get("metadata") or {}
 
-    text = _first_present(hit, ["text", "chunk", "content", "passage"]) or _first_present(
-        meta, ["text", "chunk", "content", "passage"]
-    ) or ""
-
-    score = _first_present(hit, ["score", "similarity", "cosine", "rank_score"]) or _first_present(
-        meta, ["score", "similarity", "cosine", "rank_score"]
+    text = (
+        _first_present(hit, ["text", "chunk", "content", "passage"])
+        or _first_present(meta, ["text", "chunk", "content", "passage"])
+        or ""
     )
 
-    source = _first_present(hit, ["source", "doc_id", "document", "file", "url", "path"]) or _first_present(
-        meta, ["source", "doc_id", "document", "file", "url", "path"]
-    ) or f"doc_{i}"
+    score = (
+        _first_present(hit, ["score", "similarity", "cosine", "rank_score"])
+        or _first_present(meta, ["score", "similarity", "cosine", "rank_score"])
+    )
+
+    source = (
+        _first_present(hit, ["source", "doc_id", "document", "file", "url", "path"])
+        or _first_present(meta, ["source", "doc_id", "document", "file", "url", "path"])
+        or f"doc_{i}"
+    )
 
     title = _first_present(hit, ["title", "doc_title"]) or _first_present(meta, ["title", "doc_title"])
     section = _first_present(hit, ["section", "heading"]) or _first_present(meta, ["section", "heading"])
     page = _first_present(hit, ["page", "page_number"]) or _first_present(meta, ["page", "page_number"])
     chunk_id = _first_present(hit, ["chunk_id", "id"]) or _first_present(meta, ["chunk_id", "id"]) or i
+
+    # NEW: provenance anchors (from your chunk store)
+    retrieved_at = _first_present(hit, ["retrieved_at"]) or _first_present(meta, ["retrieved_at"])
+    content_hash = _first_present(hit, ["content_hash"]) or _first_present(meta, ["content_hash"])
 
     return {
         "id": str(chunk_id),
@@ -78,6 +89,8 @@ def normalize_hit(hit: Dict[str, Any], i: int) -> Dict[str, Any]:
         "section": section,
         "page": page,
         "score": float(score) if score is not None else None,
+        "retrieved_at": retrieved_at,
+        "content_hash": content_hash,
         "text": str(text),
         "raw": hit,  # keep for debugging; remove later if you want
     }
@@ -138,25 +151,24 @@ def answer_extractive(
         unique_chunks = set(ei for _, _, ei in candidates)
 
         if len(unique_chunks) >= 2:
-           # pick top sentence per chunk
-           per_chunk = {}
-           for score, sent, ei in candidates:
-               if ei not in per_chunk:
-                per_chunk[ei] = (score, sent)
-               if len(per_chunk) >= max_sentences:
-                   break
+            # pick top sentence per chunk
+            per_chunk: Dict[int, Tuple[float, str]] = {}
+            for score, sent, ei in candidates:
+                if ei not in per_chunk:
+                    per_chunk[ei] = (score, sent)
+                if len(per_chunk) >= max_sentences:
+                    break
 
-           selected = [(s, sent, ei) for ei, (s, sent) in per_chunk.items()]
+            selected = [(s, sent, ei) for ei, (s, sent) in per_chunk.items()]
 
         if not selected:
             return ExtractiveAnswer(
-            answer="",
-            confidence=0.0,
-            rationale="multi_chunk_candidates_insufficient",
-            evidence=norm[:5],
-            citations=[],
-        )
-
+                answer="",
+                confidence=0.0,
+                rationale="multi_chunk_candidates_insufficient",
+                evidence=norm[:5],
+                citations=[],
+            )
 
     # Confidence: top overlap + evidence spread
     top_score = selected[0][0]
@@ -176,9 +188,11 @@ def answer_extractive(
             "section": ev["section"],
             "page": ev["page"],
             "score": float(score),
+            # NEW: provenance anchors in citations
+            "retrieved_at": ev.get("retrieved_at"),
+            "content_hash": ev.get("content_hash"),
         }
         citations.append(cite)
-        # append inline marker [1], [2], ...
         answer_sents.append(f"{sent} [{idx}]")
 
     # Evidence subset used
@@ -192,3 +206,37 @@ def answer_extractive(
         evidence=used_evidence,
         citations=citations,
     )
+
+
+def answer(query: str, top_k: int = 5) -> Dict[str, Any]:
+    """
+    Public API wrapper used by FastAPI /answer endpoint.
+    - runs retrieval
+    - runs extractive answering
+    - returns answer + citations + evidence (auditable)
+    """
+    best, hits = retrieve(query, top_k)
+
+    ex = answer_extractive(query=query, hits=hits, max_sentences=3)
+
+    # Trim evidence text so payload stays sane in PowerShell
+    trimmed_evidence: List[Dict[str, Any]] = []
+    for ev in ex.evidence:
+        ev2 = dict(ev)
+        if ev2.get("text"):
+            ev2["text"] = ev2["text"][:1200]
+        trimmed_evidence.append(ev2)
+
+    return {
+        "status": "ok",
+        "query": query,
+        "answer": ex.answer,
+        "confidence": ex.confidence,
+        "rationale": ex.rationale,
+        "citations": ex.citations,
+        "evidence": trimmed_evidence,
+        "retrieval": {
+            "best_score": float(best) if best is not None else None,
+            "top_k": int(top_k),
+        },
+    }

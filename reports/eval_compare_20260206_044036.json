@@ -1,0 +1,619 @@
+{
+  "ts": "2026-02-06 04:40:30",
+  "top_k": 5,
+  "questions": 10,
+  "modes": {
+    "hybrid_rrf": {
+      "recall@k": 0.7,
+      "mrr@k": 0.65,
+      "ndcg@k": 0.6450650813146741,
+      "confidence_pass_rate": 1.0,
+      "per_question": [
+        {
+          "id": "q001",
+          "q": "What is APRA and what does it regulate?",
+          "mode": "hybrid_rrf",
+          "best_score": 0.5837758779525757,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "APRA",
+            "prudential"
+          ],
+          "rels": [
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0002",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 2,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "0bea3f41cb1a55faa9718fb88ec1ade3946da92f35aeadb0b51ff7d70c996964_0013",
+              "title": "Check if you need to enrol or register | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/check-if-you-need-enrol-or-register"
+            },
+            {
+              "rank": 3,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "8c6f35929c79a2944b9073c541d97ec71886a060edc10422a9ee99ffbdbd8a32_0007",
+              "title": "Welcome to APRA | APRA",
+              "url": "https://www.apra.gov.au/"
+            },
+            {
+              "rank": 4,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "ac96868cc9beac3185ac2a8fa3d25adbbc17ee15b423cf46cefbf2252c1ed6e7_0018",
+              "title": "The geographical link requirement | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/geographical-link-requirement"
+            },
+            {
+              "rank": 5,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "dd89cd3c07aa0051a8c18a4c74470c0b3af6fe93f07f3964d2475ef7265e4958_0005",
+              "title": "Prudential policy | APRA",
+              "url": "https://www.apra.gov.au/prudential-policy"
+            }
+          ]
+        },
+        {
+          "id": "q002",
+          "q": "What is AUSTRAC responsible for?",
+          "mode": "hybrid_rrf",
+          "best_score": 0.7148327827453613,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "money",
+            "laundering"
+          ],
+          "rels": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "997f839cb35a2801d522c179b88d3cd450b940df3f5b138f339d8caf3c143e2e_0018",
+              "title": "Business | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business"
+            },
+            {
+              "rank": 2,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0009",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 3,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "ac96868cc9beac3185ac2a8fa3d25adbbc17ee15b423cf46cefbf2252c1ed6e7_0023",
+              "title": "The geographical link requirement | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/geographical-link-requirement"
+            },
+            {
+              "rank": 4,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0009",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 5,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "7eb031081f3b11fe14465ec23dd3b4bf0dc23e1294c28f26dbf08dfc7d5ef7ef_0014",
+              "title": "Not for profits | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/not-profits"
+            }
+          ]
+        },
+        {
+          "id": "q003",
+          "q": "What is a suspicious matter report?",
+          "mode": "hybrid_rrf",
+          "best_score": 0.4195954203605652,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "report"
+          ],
+          "rels": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "hybrid_rrf",
+              "score": 0.03252247488101534,
+              "chunk_id": "e006fe1c27d036ab691d7a3a4d5c62bf8f4836423d6655a81d91f18877a1b2e1_0014",
+              "title": "Your obligations | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/your-obligations"
+            },
+            {
+              "rank": 2,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "0276701405011f6d2d829a4d2b2526cab4e4f42da5885896a6e01e75ac705a8c_0016",
+              "title": "Bullion dealers overview | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/bullion-dealers/bullion-dealers-overview"
+            },
+            {
+              "rank": 3,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "7eb031081f3b11fe14465ec23dd3b4bf0dc23e1294c28f26dbf08dfc7d5ef7ef_0008",
+              "title": "Not for profits | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/not-profits"
+            },
+            {
+              "rank": 4,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "41b4607631e0adfa51c993bbc79e4006fca7ecb140e93a5f881beb73af9dc8d2_0008",
+              "title": "Remittance service providers | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/remittance-service-providers"
+            },
+            {
+              "rank": 5,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "0276701405011f6d2d829a4d2b2526cab4e4f42da5885896a6e01e75ac705a8c_0015",
+              "title": "Bullion dealers overview | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/bullion-dealers/bullion-dealers-overview"
+            }
+          ]
+        },
+        {
+          "id": "q004",
+          "q": "Define model risk management in a regulated context.",
+          "mode": "hybrid_rrf",
+          "best_score": 0.49087002873420715,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "model",
+            "risk"
+          ],
+          "rels": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "hybrid_rrf",
+              "score": 0.03252247488101534,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0010",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 2,
+              "retriever": "hybrid_rrf",
+              "score": 0.03177805800756621,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0015",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 3,
+              "retriever": "hybrid_rrf",
+              "score": 0.031754032258064516,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0012",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 4,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0018",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 5,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0011",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            }
+          ]
+        },
+        {
+          "id": "q005",
+          "q": "What is record-keeping in AML/CTF obligations?",
+          "mode": "hybrid_rrf",
+          "best_score": 0.4909275472164154,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "record"
+          ],
+          "rels": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "f6600aca16dfdb90ef1ce428d53d8aedba210e323b5ecf3560830b27eae986a6_0006",
+              "title": "E-learning | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/e-learning"
+            },
+            {
+              "rank": 2,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "0276701405011f6d2d829a4d2b2526cab4e4f42da5885896a6e01e75ac705a8c_0013",
+              "title": "Bullion dealers overview | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/bullion-dealers/bullion-dealers-overview"
+            },
+            {
+              "rank": 3,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "b7b01c408bf4c32f023c6cbce7449f640058c79dd7e519d495816e9a268c2af3_0006",
+              "title": "Homepage | AUSTRAC",
+              "url": "https://www.austrac.gov.au/"
+            },
+            {
+              "rank": 4,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "0276701405011f6d2d829a4d2b2526cab4e4f42da5885896a6e01e75ac705a8c_0006",
+              "title": "Bullion dealers overview | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/bullion-dealers/bullion-dealers-overview"
+            },
+            {
+              "rank": 5,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "997f839cb35a2801d522c179b88d3cd450b940df3f5b138f339d8caf3c143e2e_0006",
+              "title": "Business | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business"
+            }
+          ]
+        },
+        {
+          "id": "q006",
+          "q": "What is KYC and why is it required?",
+          "mode": "hybrid_rrf",
+          "best_score": 0.4427352845668793,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "customer"
+          ],
+          "rels": [
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "e006fe1c27d036ab691d7a3a4d5c62bf8f4836423d6655a81d91f18877a1b2e1_0017",
+              "title": "Your obligations | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/your-obligations"
+            },
+            {
+              "rank": 2,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0036",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 3,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "a1de58adb4edcc176763e6df7ebb0e674b67cf2d3f01e7b16c85197130a37b86_0000",
+              "title": "AUSTRAC InBrief | AUSTRAC",
+              "url": "https://www.austrac.gov.au/news-and-media/austrac-inbrief/form"
+            },
+            {
+              "rank": 4,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0041",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 5,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "5cfc1137c362983aec1877ad1902d60f248a6d99d25728d3ea7d1f810a385720_0020",
+              "title": "Who and what we regulate | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/who-and-what-we-regulate"
+            }
+          ]
+        },
+        {
+          "id": "q007",
+          "q": "What is due diligence in AML programs?",
+          "mode": "hybrid_rrf",
+          "best_score": 0.5532230138778687,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "due"
+          ],
+          "rels": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "hybrid_rrf",
+              "score": 0.03252247488101534,
+              "chunk_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0016",
+              "title": "AML/CTF programs | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs"
+            },
+            {
+              "rank": 2,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0015",
+              "title": "AML/CTF programs | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs"
+            },
+            {
+              "rank": 3,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0018",
+              "title": "AML/CTF programs | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs"
+            },
+            {
+              "rank": 4,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "f6600aca16dfdb90ef1ce428d53d8aedba210e323b5ecf3560830b27eae986a6_0013",
+              "title": "E-learning | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/e-learning"
+            },
+            {
+              "rank": 5,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "0276701405011f6d2d829a4d2b2526cab4e4f42da5885896a6e01e75ac705a8c_0016",
+              "title": "Bullion dealers overview | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/your-industry/bullion-dealers/bullion-dealers-overview"
+            }
+          ]
+        },
+        {
+          "id": "q008",
+          "q": "What is a risk assessment requirement in compliance programs?",
+          "mode": "hybrid_rrf",
+          "best_score": 0.5926802158355713,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "risk"
+          ],
+          "rels": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0015",
+              "title": "AML/CTF programs | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs"
+            },
+            {
+              "rank": 2,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "ac96868cc9beac3185ac2a8fa3d25adbbc17ee15b423cf46cefbf2252c1ed6e7_0020",
+              "title": "The geographical link requirement | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/geographical-link-requirement"
+            },
+            {
+              "rank": 3,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0026",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 4,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "f6600aca16dfdb90ef1ce428d53d8aedba210e323b5ecf3560830b27eae986a6_0016",
+              "title": "E-learning | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/e-learning"
+            },
+            {
+              "rank": 5,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0010",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            }
+          ]
+        },
+        {
+          "id": "q009",
+          "q": "What is the purpose of internal controls in compliance?",
+          "mode": "hybrid_rrf",
+          "best_score": 0.40191322565078735,
+          "min_confidence": 0.15,
+          "confidence_pass": true,
+          "expected_contains": [
+            "control"
+          ],
+          "rels": [
+            0,
+            1,
+            0,
+            1,
+            1
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0015",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 2,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0006",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 3,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "4cb9aa03adfa264f3db5f0a4ca287b51db0c6d06e55f6898d9692263495201e4_0017",
+              "title": "Prudential and Reporting Standards for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/industries/1/standards"
+            },
+            {
+              "rank": 4,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0005",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 5,
+              "retriever": "hybrid_rrf",
+              "score": 0.015873015873015872,
+              "chunk_id": "1c6837a8c5a17cc611cc4377573bc6bc7686bfc9bfe2a566a358da37bfa95d9f_0015",
+              "title": "AML/CTF programs | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/core-guidance/amlctf-programs"
+            }
+          ]
+        },
+        {
+          "id": "q010",
+          "q": "What does 'fail-closed' mean in a regulatory RAG system?",
+          "mode": "hybrid_rrf",
+          "best_score": 0.3341912031173706,
+          "min_confidence": 0.0,
+          "confidence_pass": true,
+          "expected_contains": [
+            "insufficient",
+            "evidence"
+          ],
+          "rels": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "hits": [
+            {
+              "rank": 1,
+              "retriever": "hybrid_rrf",
+              "score": 0.03125,
+              "chunk_id": "87b4d0e90206036cbacdbb1800c2d424fe70a9e0e7adca08c92b9ef6c1c42fff_0006",
+              "title": "Consultations for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/consultations/1"
+            },
+            {
+              "rank": 2,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "87b4d0e90206036cbacdbb1800c2d424fe70a9e0e7adca08c92b9ef6c1c42fff_0010",
+              "title": "Consultations for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/consultations/1"
+            },
+            {
+              "rank": 3,
+              "retriever": "hybrid_rrf",
+              "score": 0.01639344262295082,
+              "chunk_id": "ac96868cc9beac3185ac2a8fa3d25adbbc17ee15b423cf46cefbf2252c1ed6e7_0014",
+              "title": "The geographical link requirement | AUSTRAC",
+              "url": "https://www.austrac.gov.au/business/new-to-austrac/geographical-link-requirement"
+            },
+            {
+              "rank": 4,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "d893a8cc8288edfa9a9c6cd612941a4e5d64ef4ca63f89215a5b1630edab01b3_0015",
+              "title": "Prudential and Reporting Standards for General insurance | APRA",
+              "url": "https://www.apra.gov.au/industries/2/standards"
+            },
+            {
+              "rank": 5,
+              "retriever": "hybrid_rrf",
+              "score": 0.016129032258064516,
+              "chunk_id": "87b4d0e90206036cbacdbb1800c2d424fe70a9e0e7adca08c92b9ef6c1c42fff_0012",
+              "title": "Consultations for Authorised deposit-taking institutions | APRA",
+              "url": "https://www.apra.gov.au/consultations/1"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

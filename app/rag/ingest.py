@@ -1,12 +1,14 @@
 # app/rag/ingest.py
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import numpy as np
 
@@ -31,6 +33,16 @@ CHUNK_OVERLAP_WORDS = int(os.getenv("CHUNK_OVERLAP_WORDS", "40"))
 EMBED_MODEL_NAME = os.getenv("EMBED_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
 
 
+def _utc_now_iso() -> str:
+    # Example: 2026-02-07T09:15:30Z
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def _sha256_text(text: str) -> str:
+    b = (text or "").encode("utf-8", errors="ignore")
+    return hashlib.sha256(b).hexdigest()
+
+
 @dataclass
 class Chunk:
     chunk_id: str
@@ -39,6 +51,9 @@ class Chunk:
     url: str
     title: str
     text: str
+    # New provenance anchors
+    retrieved_at: Optional[str] = None
+    content_hash: Optional[str] = None
 
 
 def _words(s: str) -> List[str]:
@@ -49,7 +64,7 @@ def chunk_text(text: str, max_words: int, overlap_words: int) -> List[str]:
     w = _words(text)
     if not w:
         return []
-    chunks = []
+    chunks: List[str] = []
     start = 0
     while start < len(w):
         end = min(start + max_words, len(w))
@@ -62,17 +77,33 @@ def chunk_text(text: str, max_words: int, overlap_words: int) -> List[str]:
 
 
 def load_docs() -> List[Dict]:
-    docs = []
+    """
+    Loads (meta + raw text) into a single doc object.
+    We also attach:
+      - retrieved_at: when this pipeline ran (fallback)
+      - content_hash: sha256 of the doc text
+    If your meta files already include retrieved_at, we keep it.
+    """
+    docs: List[Dict] = []
+    fallback_retrieved_at = _utc_now_iso()
+
     for meta_path in META_DIR.glob("*.json"):
         meta = json.loads(meta_path.read_text(encoding="utf-8"))
         doc_id = meta["doc_id"]
         raw_path = RAW_DIR / f"{doc_id}.txt"
         if not raw_path.exists():
             continue
+
         text = raw_path.read_text(encoding="utf-8", errors="ignore").strip()
         if len(text) < 200:
             continue
-        docs.append({**meta, "text": text})
+
+        # Prefer meta timestamps if present; otherwise fallback to "now"
+        retrieved_at = meta.get("retrieved_at") or fallback_retrieved_at
+        content_hash = meta.get("content_hash") or _sha256_text(text)
+
+        docs.append({**meta, "text": text, "retrieved_at": retrieved_at, "content_hash": content_hash})
+
     return docs
 
 
@@ -95,6 +126,8 @@ def main() -> None:
                     url=d.get("url", ""),
                     title=d.get("title", ""),
                     text=p,
+                    retrieved_at=d.get("retrieved_at"),
+                    content_hash=d.get("content_hash"),
                 )
             )
 
@@ -121,10 +154,16 @@ def main() -> None:
             "url": c.url,
             "title": c.title,
             "text": c.text,
+            # New per-chunk provenance (doc-derived but stored on every chunk row)
+            "retrieved_at": c.retrieved_at,
+            "content_hash": c.content_hash,
         }
         for c in chunks
     ]
-    (INDEX_DIR / "chunks.json").write_text(json.dumps(chunk_store, ensure_ascii=False, indent=2), encoding="utf-8")
+    (INDEX_DIR / "chunks.json").write_text(
+        json.dumps(chunk_store, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
 
     stats = {
         "docs": len(docs),
@@ -133,11 +172,13 @@ def main() -> None:
         "chunk_max_words": CHUNK_MAX_WORDS,
         "chunk_overlap_words": CHUNK_OVERLAP_WORDS,
         "dim": int(dim),
+        # Optional: stamp the build itself
+        "built_at": _utc_now_iso(),
     }
     (INDEX_DIR / "stats.json").write_text(json.dumps(stats, indent=2), encoding="utf-8")
 
     print(f"[DONE] index_dir={INDEX_DIR.resolve()}")
-    print(f"[DONE] wrote: faiss.index, chunks.json, stats.json")
+    print("[DONE] wrote: faiss.index, chunks.json, stats.json")
 
 
 if __name__ == "__main__":
