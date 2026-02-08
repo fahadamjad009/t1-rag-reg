@@ -27,3 +27,15 @@ venv/
 # Build artifacts
 dist/
 build/
+# local corpora + indexes
+data/corpus/
+data/index/
+data/.hf_cache/
+
+# backups / scratch
+data/corpus_backup_before_*/
+app/eval/*_before_*.jsonl
+app/eval/goldset_candidate.jsonl
+
+# generated reports
+reports/
