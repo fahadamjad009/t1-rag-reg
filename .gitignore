@@ -15,3 +15,7 @@ reports/*summary*.md
 # python junk
 **/__pycache__/
 *.pyc
+# generated eval artifacts (keep only leaderboard_latest.csv)
+reports/eval_report_*.json
+reports/eval_per_query_*.csv
+!reports/eval_leaderboard_latest.csv
