@@ -1,9 +1,0 @@
-{
-  "docs": 50,
-  "chunks": 791,
-  "embed_model": "sentence-transformers/all-MiniLM-L6-v2",
-  "chunk_max_words": 220,
-  "chunk_overlap_words": 40,
-  "dim": 384,
-  "built_at": "2026-02-07T09:27:24Z"
-}

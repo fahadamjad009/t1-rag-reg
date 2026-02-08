@@ -1,21 +1,48 @@
+############################################
+# Local data / caches (REBUILDABLE)
+############################################
 data/corpus/
 data/index/
 data/.hf_cache/
 data/corpus_backup_before_*/
-app/eval/*_before_*.jsonl
-app/eval/goldset_candidate.jsonl
 
-# keep JSON/CSV, ignore generated images and md
-reports/*.png
-reports/*summary*.md
-# local env
-.env
-.venv/
+# Optional placeholders (tracked)
+!data/corpus/.gitkeep
+!data/index/.gitkeep
 
-# python junk
-**/__pycache__/
-*.pyc
-# generated eval artifacts (keep only leaderboard_latest.csv)
+
+############################################
+# Evaluation artifacts (generated)
+############################################
+# Keep only leaderboard_latest.csv
 reports/eval_report_*.json
 reports/eval_per_query_*.csv
 !reports/eval_leaderboard_latest.csv
+
+# Keep JSON/CSV, ignore generated images + md summaries
+reports/*.png
+reports/*summary*.md
+
+# App eval scratch / goldset candidates (local-only)
+app/eval/*_before_*.jsonl
+app/eval/goldset_candidate.jsonl
+
+
+############################################
+# Environment
+############################################
+.env
+.venv/
+
+
+############################################
+# Python junk
+############################################
+**/__pycache__/
+*.pyc
+
+
+############################################
+# Backups / save copies
+############################################
+*_before_*.py
