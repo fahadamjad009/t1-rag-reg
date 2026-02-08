@@ -8,3 +8,10 @@ app/eval/goldset_candidate.jsonl
 # keep JSON/CSV, ignore generated images and md
 reports/*.png
 reports/*summary*.md
+# local env
+.env
+.venv/
+
+# python junk
+**/__pycache__/
+*.pyc
