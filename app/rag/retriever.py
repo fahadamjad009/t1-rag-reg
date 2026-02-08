@@ -24,6 +24,23 @@ TOP_K = int(os.getenv("TOP_K", "5"))
 RAG_MIN_SCORE = float(os.getenv("RAG_MIN_SCORE", "0.25"))  # cosine similarity if normalized
 
 
+# -------------------------------------------------------
+# Step 2D — Low-quality source filtering (fast + measurable)
+# -------------------------------------------------------
+EXCLUDE_SOURCE_SUBSTRINGS = [
+    "_business_your_industry",          # category hubs
+    "_business_new_to_austrac_e_learning",
+    "_news_and_media_",
+    "_inbrief_",
+    "_form",
+]
+
+
+def _is_low_quality_source_id(source_id: str) -> bool:
+    s = (source_id or "").lower()
+    return any(sub.lower() in s for sub in EXCLUDE_SOURCE_SUBSTRINGS)
+
+
 @lru_cache(maxsize=1)
 def _load_model() -> SentenceTransformer:
     return SentenceTransformer(EMBED_MODEL_NAME)
@@ -85,7 +102,11 @@ def _vector_retrieve(query: str, k: int) -> Tuple[float, List[Dict[str, Any]]]:
     q = model.encode([query], normalize_embeddings=True)
     q = np.asarray(q, dtype="float32")
 
-    scores, ids = index.search(q, k)
+    # Over-fetch so filtering doesn't shrink below k too often
+    # (cap at corpus size)
+    over_k = min(max(k * 3, k), max(1, len(chunks)))
+
+    scores, ids = index.search(q, over_k)
     scores = scores[0].tolist()
     ids = ids[0].tolist()
 
@@ -95,8 +116,16 @@ def _vector_retrieve(query: str, k: int) -> Tuple[float, List[Dict[str, Any]]]:
     for score, i in zip(scores, ids):
         if i < 0:
             continue
-        best = max(best, float(score))
+
         c = chunks[i]
+        sid = c.get("source_id") or ""
+
+        # hard exclude by source_id patterns
+        if _is_low_quality_source_id(str(sid)):
+            continue
+
+        best = max(best, float(score))
+
         results.append(
             {
                 "score": float(score),
@@ -112,6 +141,9 @@ def _vector_retrieve(query: str, k: int) -> Tuple[float, List[Dict[str, Any]]]:
             }
         )
 
+        if len(results) >= k:
+            break
+
     return float(best), results
 
 
@@ -124,7 +156,10 @@ def _bm25_retrieve(query: str, k: int) -> Tuple[float, List[Dict[str, Any]]]:
     ix = _load_bm25()
     cmap = _load_chunk_map()
 
-    pairs = bm25_search(ix, query, top_k=k)  # List[(chunk_id, score)]
+    # Over-fetch to survive filtering
+    over_k = max(k * 5, k)
+
+    pairs = bm25_search(ix, query, top_k=over_k)  # List[(chunk_id, score)]
     results: List[Dict[str, Any]] = []
 
     best = 0.0
@@ -132,7 +167,13 @@ def _bm25_retrieve(query: str, k: int) -> Tuple[float, List[Dict[str, Any]]]:
         c = cmap.get(str(cid))
         if not c:
             continue
+
+        sid = c.get("source_id") or ""
+        if _is_low_quality_source_id(str(sid)):
+            continue
+
         best = max(best, float(score))
+
         results.append(
             {
                 "score": float(score),
@@ -147,6 +188,9 @@ def _bm25_retrieve(query: str, k: int) -> Tuple[float, List[Dict[str, Any]]]:
                 "text": c.get("text"),
             }
         )
+
+        if len(results) >= k:
+            break
 
     return float(best), results
 
@@ -222,9 +266,16 @@ def retrieve(
         return _bm25_retrieve(query, k)
 
     if mode in ("hybrid_rrf", "hybrid", "rrf"):
-        v_best, v_res = _vector_retrieve(query, k)
-        _, b_res = _bm25_retrieve(query, k)
-        fused = _rrf_fuse(v_res, b_res, k=k, rrf_k=60)
+        # Over-fetch each retriever, fuse a larger pool, then filter + slice to k.
+        v_best, v_res = _vector_retrieve(query, k * 3)
+        _, b_res = _bm25_retrieve(query, k * 3)
+
+        fused_big = _rrf_fuse(v_res, b_res, k=max(k * 5, k), rrf_k=60)
+
+        fused = [
+            h for h in fused_big
+            if not _is_low_quality_source_id(h.get("source_id", ""))
+        ][:k]
 
         # best_score remains vector-best for now (threshold is cosine-based)
         return float(v_best), fused
