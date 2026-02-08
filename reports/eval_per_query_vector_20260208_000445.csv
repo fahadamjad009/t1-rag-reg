@@ -1,6 +1,0 @@
-q,mode,relevant_count,retrieved_count,recall@1,mrr@1,ndcg@1,recall@3,mrr@3,ndcg@3,recall@5,mrr@5,ndcg@5,recall@10,mrr@10,ndcg@10,answer_coverage,retrieved_ids_top10,must_include,cited_ids
-What is KYC?,vector,1,1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,austrac_aml_ctf_programs,austrac_kyc_overview,
-Why is AML required?,vector,1,1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,austrac_aml_ctf_programs,austrac_aml_obligations,
-Who regulates financial crime in Australia?,vector,1,1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,austrac_aml_ctf_programs,austrac_role,
-What customer identification procedures are required?,vector,1,1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,austrac_aml_ctf_programs,austrac_cip,
-What penalties apply for AML breaches?,vector,1,1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,austrac_aml_ctf_programs,austrac_penalties,
