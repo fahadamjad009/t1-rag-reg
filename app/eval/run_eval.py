@@ -71,51 +71,69 @@ def _dedupe_keep_order(items: List[str]) -> List[str]:
 
 def _extract_doc_ids_from_hits(hits: List[Dict[str, Any]]) -> List[str]:
     """
-    IMPORTANT:
-    For evaluation right now, prefer chunk-level IDs first (chunk_id),
-    then fall back to source_id/doc_id/source/id.
+    Step 2D FIX:
+    Goldset is defined in terms of SOURCE IDs (page-level source_id),
+    so evaluation must also compare at source_id level.
 
-    This lets you get meaningful retrieval metrics even if your corpus currently
-    has only 1 source_id for many chunks.
+    Therefore:
+      - Prefer source_id
+      - Fall back to doc_id if source_id missing
+      - Do NOT use chunk_id for retrieval metrics (chunk_id will never match the goldset)
     """
     ids: List[str] = []
     for h in hits or []:
         if not isinstance(h, dict):
             continue
-        for key in ("chunk_id", "source_id", "doc_id", "source", "id"):
-            v = h.get(key)
-            if isinstance(v, str) and v.strip():
-                ids.append(v.strip())
-                break
+
+        sid = h.get("source_id")
+        if isinstance(sid, str) and sid.strip():
+            ids.append(sid.strip())
+            continue
+
+        did = h.get("doc_id")
+        if isinstance(did, str) and did.strip():
+            ids.append(did.strip())
+            continue
+
     return _dedupe_keep_order(ids)
 
 
 def _extract_doc_ids_from_citations(answer_payload: Dict[str, Any]) -> List[str]:
     """
-    For answer coverage: use citations/evidence if present.
+    Step 2D FIX:
+    Answer coverage must also operate at source_id level.
     (Will be empty while _answer() is stubbed.)
     """
     ids: List[str] = []
+
+    if not isinstance(answer_payload, dict):
+        return ids
 
     cits = answer_payload.get("citations")
     if isinstance(cits, list):
         for c in cits:
             if isinstance(c, dict):
-                for key in ("chunk_id", "source_id", "doc_id", "source", "id"):
-                    v = c.get(key)
-                    if isinstance(v, str) and v.strip():
-                        ids.append(v.strip())
-                        break
+                sid = c.get("source_id")
+                if isinstance(sid, str) and sid.strip():
+                    ids.append(sid.strip())
+                    continue
+
+                did = c.get("doc_id")
+                if isinstance(did, str) and did.strip():
+                    ids.append(did.strip())
 
     ev = answer_payload.get("evidence")
     if isinstance(ev, list):
         for e in ev:
             if isinstance(e, dict):
-                for key in ("chunk_id", "source_id", "doc_id", "source", "id"):
-                    v = e.get(key)
-                    if isinstance(v, str) and v.strip():
-                        ids.append(v.strip())
-                        break
+                sid = e.get("source_id")
+                if isinstance(sid, str) and sid.strip():
+                    ids.append(sid.strip())
+                    continue
+
+                did = e.get("doc_id")
+                if isinstance(did, str) and did.strip():
+                    ids.append(did.strip())
 
     return _dedupe_keep_order(ids)
 
