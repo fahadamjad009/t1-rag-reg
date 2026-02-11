@@ -5,7 +5,7 @@ Computes:
 - Recall@k
 - MRR@k
 - nDCG@k
-- Answer coverage for must_include sources (based on citations)  [wired to extractive answering]
+- Answer coverage for must_include sources (based on citations)  [stubbed until answer module path is wired]
 
 Outputs:
 - reports/eval_report_<mode>_<timestamp>.json
@@ -20,7 +20,7 @@ import math
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 
 # -----------------------------
@@ -71,13 +71,14 @@ def _dedupe_keep_order(items: List[str]) -> List[str]:
 
 def _extract_doc_ids_from_hits(hits: List[Dict[str, Any]]) -> List[str]:
     """
+    Step 2D FIX:
     Goldset is defined in terms of SOURCE IDs (page-level source_id),
     so evaluation must also compare at source_id level.
 
     Therefore:
       - Prefer source_id
       - Fall back to doc_id if source_id missing
-      - Do NOT use chunk_id for retrieval metrics
+      - Do NOT use chunk_id for retrieval metrics (chunk_id will never match the goldset)
     """
     ids: List[str] = []
     for h in hits or []:
@@ -99,58 +100,42 @@ def _extract_doc_ids_from_hits(hits: List[Dict[str, Any]]) -> List[str]:
 
 def _extract_doc_ids_from_citations(answer_payload: Dict[str, Any]) -> List[str]:
     """
-    Answer coverage must operate at source_id level.
-    Supports citations/evidence entries that include source_id/doc_id.
+    Step 2D FIX:
+    Answer coverage must also operate at source_id level.
+    (Will be empty while _answer() is stubbed.)
     """
     ids: List[str] = []
 
     if not isinstance(answer_payload, dict):
         return ids
 
-    def _pull_from_list(lst: Any) -> None:
-        nonlocal ids
-        if not isinstance(lst, list):
-            return
-        for c in lst:
+    cits = answer_payload.get("citations")
+    if isinstance(cits, list):
+        for c in cits:
             if isinstance(c, dict):
                 sid = c.get("source_id")
                 if isinstance(sid, str) and sid.strip():
                     ids.append(sid.strip())
                     continue
+
                 did = c.get("doc_id")
                 if isinstance(did, str) and did.strip():
                     ids.append(did.strip())
-                    continue
-            elif isinstance(c, str) and c.strip():
-                # allow plain strings if your extractive returns ids directly
-                ids.append(c.strip())
 
-    _pull_from_list(answer_payload.get("citations"))
-    _pull_from_list(answer_payload.get("evidence"))
-    _pull_from_list(answer_payload.get("sources"))
+    ev = answer_payload.get("evidence")
+    if isinstance(ev, list):
+        for e in ev:
+            if isinstance(e, dict):
+                sid = e.get("source_id")
+                if isinstance(sid, str) and sid.strip():
+                    ids.append(sid.strip())
+                    continue
+
+                did = e.get("doc_id")
+                if isinstance(did, str) and did.strip():
+                    ids.append(did.strip())
 
     return _dedupe_keep_order(ids)
-
-
-def _format_citations(citations: Any, max_items: int = 5) -> str:
-    """
-    Turn citation dicts into a compact, human-readable string for CSV/debugging.
-    Example:
-      [1] <source_id> — <evidence...> | [2] <source_id> — <evidence...>
-    """
-    if not isinstance(citations, list):
-        return ""
-
-    out: List[str] = []
-    for i, c in enumerate(citations[:max_items], start=1):
-        if not isinstance(c, dict):
-            continue
-        sid = (c.get("source_id") or c.get("doc_id") or "").strip()
-        ev = (c.get("evidence") or "").strip().replace("\n", " ")
-        if len(ev) > 160:
-            ev = ev[:160] + "…"
-        out.append(f"[{i}] {sid} — {ev}")
-    return " | ".join(out)
 
 
 # -----------------------------
@@ -227,49 +212,14 @@ def _retrieve(query: str, top_k: int = 10, mode: str = "vector") -> List[Dict[st
     return hits or []
 
 
-def _answer(query: str, hits: List[Dict[str, Any]]) -> Dict[str, Any]:
+def _answer(query: str, top_k: int = 5, mode: str = "vector") -> Dict[str, Any]:
     """
-    Phase 3A: Wire extractive answering into eval.
-
-    Calls: app.rag.extractive.answer_from_hits(query, hits)
-
-    Supports return shapes:
-      - dict: {"answer": "...", "citations": [...]} (preferred)
-      - tuple: (answer_text, citations_list)
-      - str: answer_text
-
-    Returns normalized payload:
-      {"answer": str, "citations": list}
+    Stub: your repo does not have app/rag/answerer.py.
+    Retrieval eval (Recall/MRR/nDCG) is the core of Step 1D-3.
+    We'll wire this later once we locate the real answer module.
     """
-    if not hits:
-        return {"answer": "", "citations": []}
-
-    from app.rag.extractive import answer_from_hits  # type: ignore
-
-    res = answer_from_hits(query, hits)
-
-    # dict style
-    if isinstance(res, dict):
-        ans = res.get("answer") or res.get("text") or ""
-        cits = res.get("citations") or res.get("sources") or res.get("evidence") or []
-        if not isinstance(cits, list):
-            cits = [cits]
-        return {"answer": str(ans), "citations": cits}
-
-    # tuple style
-    if isinstance(res, tuple) and len(res) >= 2:
-        ans = res[0] or ""
-        cits = res[1] or []
-        if not isinstance(cits, list):
-            cits = [cits]
-        return {"answer": str(ans), "citations": cits}
-
-    # string style
-    if isinstance(res, str):
-        return {"answer": res, "citations": []}
-
-    # fallback
-    return {"answer": str(res), "citations": []}
+    _ = (query, top_k, mode)
+    return {}
 
 
 # -----------------------------
@@ -307,8 +257,8 @@ def run(mode: str = "vector", ks: Optional[List[int]] = None) -> Dict[str, Any]:
         hits = _retrieve(q, top_k=max(ks), mode=mode)
         retrieved_ids = _extract_doc_ids_from_hits(hits)
 
-        # Answer + citations (wired)
-        ans_payload = _answer(q, hits=hits[:5])  # keep answers grounded in top hits
+        # Answer coverage (stubbed for now)
+        ans_payload = _answer(q, top_k=5, mode=mode)
         cited_ids = _extract_doc_ids_from_citations(ans_payload)
 
         row_out: Dict[str, Any] = {
@@ -335,15 +285,10 @@ def run(mode: str = "vector", ks: Optional[List[int]] = None) -> Dict[str, Any]:
         row_out["answer_coverage"] = cov
         agg["answer_coverage"] += cov
 
-        # Debug fields (IDs)
+        # Debug fields
         row_out["retrieved_ids_top10"] = "|".join(retrieved_ids[:10])
         row_out["must_include"] = "|".join(must_include)
         row_out["cited_ids"] = "|".join(cited_ids[:10])
-
-        # Step 3B: Store answer and formatted citations
-        row_out["answer_preview"] = (ans_payload.get("answer") or "")[:300].replace("\n", " ")
-        row_out["answer"] = (ans_payload.get("answer") or "").replace("\n", " ")
-        row_out["citations_formatted"] = _format_citations(ans_payload.get("citations"))
 
         per_query.append(row_out)
         n += 1
@@ -372,7 +317,7 @@ def run(mode: str = "vector", ks: Optional[List[int]] = None) -> Dict[str, Any]:
                 "recall@k": "fraction of relevant items retrieved in top-k (binary relevance)",
                 "mrr@k": "reciprocal rank of first relevant item in top-k",
                 "ndcg@k": "discounted cumulative gain normalized by ideal (binary relevance)",
-                "answer_coverage": "fraction of must_include items present in answer citations/evidence (computed from extractive citations)",
+                "answer_coverage": "fraction of must_include items present in answer citations/evidence (stubbed until answer module wired)",
             }
         },
     }
@@ -393,8 +338,9 @@ def run(mode: str = "vector", ks: Optional[List[int]] = None) -> Dict[str, Any]:
 
 if __name__ == "__main__":
     import argparse
+    import os
 
-    parser = argparse.ArgumentParser(description="Run retrieval + answer evaluation")
+    parser = argparse.ArgumentParser(description="Run retrieval evaluation")
     parser.add_argument(
         "--mode",
         default=os.environ.get("T1_EVAL_MODE", "vector"),
@@ -416,4 +362,3 @@ if __name__ == "__main__":
     out = run(mode=args.mode, ks=ks)
     print("Wrote:", out["report_path"])
     print("Wrote:", out["csv_path"])
-    print("answer_coverage:", out["report"]["metrics"].get("answer_coverage"))

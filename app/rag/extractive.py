@@ -37,6 +37,7 @@ def extractive_answer(query: str, hits: List[Dict[str, Any]], max_sentences: int
             "answer": ev,
             "citations": [{
                 "rank": 1,
+                "source_id": h0.get("source_id"),  # ⭐ added
                 "doc_id": h0.get("doc_id"),
                 "chunk_id": h0.get("chunk_id"),
                 "title": h0.get("title"),
@@ -65,6 +66,7 @@ def extractive_answer(query: str, hits: List[Dict[str, Any]], max_sentences: int
     for sent, h, hit_rank in chosen:
         citations.append({
             "rank": hit_rank,
+            "source_id": h.get("source_id"),  # ⭐ added
             "doc_id": h.get("doc_id"),
             "chunk_id": h.get("chunk_id"),
             "title": h.get("title"),
@@ -73,3 +75,14 @@ def extractive_answer(query: str, hits: List[Dict[str, Any]], max_sentences: int
         })
 
     return {"answer": answer_text, "citations": citations}
+
+
+# -------------------------------------------------------------------
+# Compatibility wrapper for Phase 3A wiring (used by run_eval.py)
+# -------------------------------------------------------------------
+def answer_from_hits(query: str, hits: List[Dict[str, Any]], max_sentences: int = 2) -> Dict[str, Any]:
+    """
+    run_eval.py expects answer_from_hits(). Keep this thin wrapper so eval wiring
+    doesn't require refactoring other modules.
+    """
+    return extractive_answer(query=query, hits=hits, max_sentences=max_sentences)

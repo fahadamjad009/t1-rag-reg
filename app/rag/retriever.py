@@ -6,13 +6,12 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-import numpy as np
 import faiss
+import numpy as np
 from sentence_transformers import SentenceTransformer
 
 # BM25
 from app.rag.bm25 import BM25Index, build_bm25_from_chunks, bm25_search
-
 
 DATA_DIR = Path(os.getenv("DATA_DIR", "data"))
 INDEX_DIR = DATA_DIR / "index"
@@ -23,12 +22,11 @@ TOP_K = int(os.getenv("TOP_K", "5"))
 # Vector similarity threshold for fail-closed gate (kept as-is for now)
 RAG_MIN_SCORE = float(os.getenv("RAG_MIN_SCORE", "0.25"))  # cosine similarity if normalized
 
-
 # -------------------------------------------------------
 # Step 2D — Low-quality source filtering (fast + measurable)
 # -------------------------------------------------------
 EXCLUDE_SOURCE_SUBSTRINGS = [
-    "_business_your_industry",          # category hubs
+    "_business_your_industry",  # category hubs
     "_business_new_to_austrac_e_learning",
     "_news_and_media_",
     "_inbrief_",
@@ -129,7 +127,7 @@ def _vector_retrieve(query: str, k: int) -> Tuple[float, List[Dict[str, Any]]]:
         results.append(
             {
                 "score": float(score),
-                "retriever": "vector",
+                "retriever": "vector",  # ✅ FIX: do not reference undefined `mode`
                 "chunk_id": c.get("chunk_id"),
                 "title": c.get("title"),
                 "url": c.get("url"),
@@ -273,13 +271,13 @@ def retrieve(
         fused_big = _rrf_fuse(v_res, b_res, k=max(k * 5, k), rrf_k=60)
 
         fused = [
-            h for h in fused_big
-            if not _is_low_quality_source_id(h.get("source_id", ""))
+            h for h in fused_big if not _is_low_quality_source_id(h.get("source_id", ""))
         ][:k]
 
         # best_score remains vector-best for now (threshold is cosine-based)
         return float(v_best), fused
 
+    # default: vector
     return _vector_retrieve(query, k)
 
 
