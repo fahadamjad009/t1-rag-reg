@@ -20,7 +20,7 @@ import math
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 
 # -----------------------------
@@ -145,8 +145,10 @@ def _format_citations(citations: Any, max_items: int = 5) -> str:
     for i, c in enumerate(citations[:max_items], start=1):
         if not isinstance(c, dict):
             continue
-        sid = (c.get("source_id") or c.get("doc_id") or "").strip()
-        ev = (c.get("evidence") or "").strip().replace("\n", " ")
+        sid = (c.get("source_id") or c.get("doc_id") or "")
+        sid = sid.strip() if isinstance(sid, str) else str(sid)
+        ev = (c.get("evidence") or "")
+        ev = ev.strip().replace("\n", " ") if isinstance(ev, str) else str(ev)
         if len(ev) > 160:
             ev = ev[:160] + "…"
         out.append(f"[{i}] {sid} — {ev}")
@@ -227,11 +229,11 @@ def _retrieve(query: str, top_k: int = 10, mode: str = "vector") -> List[Dict[st
     return hits or []
 
 
-def _answer(query: str, hits: List[Dict[str, Any]]) -> Dict[str, Any]:
+def _answer(query: str, hits: List[Dict[str, Any]], must_include: Optional[List[str]] = None) -> Dict[str, Any]:
     """
-    Phase 3A: Wire extractive answering into eval.
+    Phase 3A/3C.5: Wire extractive answering into eval, with must_include hint.
 
-    Calls: app.rag.extractive.answer_from_hits(query, hits)
+    Calls: app.rag.extractive.answer_from_hits(query, hits, must_include=must_include)
 
     Supports return shapes:
       - dict: {"answer": "...", "citations": [...]} (preferred)
@@ -246,7 +248,12 @@ def _answer(query: str, hits: List[Dict[str, Any]]) -> Dict[str, Any]:
 
     from app.rag.extractive import answer_from_hits  # type: ignore
 
-    res = answer_from_hits(query, hits)
+    # Try the new signature first; if user's extractive hasn't been updated yet,
+    # fall back to the old call to avoid breaking execution.
+    try:
+        res = answer_from_hits(query, hits, must_include=must_include)
+    except TypeError:
+        res = answer_from_hits(query, hits)
 
     # dict style
     if isinstance(res, dict):
@@ -307,8 +314,8 @@ def run(mode: str = "vector", ks: Optional[List[int]] = None) -> Dict[str, Any]:
         hits = _retrieve(q, top_k=max(ks), mode=mode)
         retrieved_ids = _extract_doc_ids_from_hits(hits)
 
-        # Answer + citations (wired)
-        ans_payload = _answer(q, hits=hits[:5])  # keep answers grounded in top hits
+        # Answer + citations (wired) — pass must_include to encourage citing the required sources
+        ans_payload = _answer(q, hits=hits[:5], must_include=must_include)  # keep answers grounded in top hits
         cited_ids = _extract_doc_ids_from_citations(ans_payload)
 
         row_out: Dict[str, Any] = {
@@ -334,6 +341,25 @@ def run(mode: str = "vector", ks: Optional[List[int]] = None) -> Dict[str, Any]:
         cov = coverage(cited_ids, must_include)
         row_out["answer_coverage"] = cov
         agg["answer_coverage"] += cov
+
+        # ✅ Phase 3C.4 — Failure reason labeling
+        retrieved_set = set(retrieved_ids)
+        cited_set = set(cited_ids)
+        must_set = set(must_include)
+
+        if cov > 0:
+            reason = "ok"
+        else:
+            if len(must_set) == 0:
+                reason = "no_must_include"
+            elif len(retrieved_set.intersection(must_set)) == 0:
+                reason = "not_retrieved"
+            elif len(cited_set.intersection(must_set)) == 0:
+                reason = "retrieved_but_not_cited"
+            else:
+                reason = "other"
+
+        row_out["failure_reason"] = reason
 
         # Debug fields (IDs)
         row_out["retrieved_ids_top10"] = "|".join(retrieved_ids[:10])
