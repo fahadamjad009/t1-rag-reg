@@ -46,3 +46,7 @@ app/eval/goldset_candidate.jsonl
 # Backups / save copies
 ############################################
 *_before_*.py
+
+# Editor/backup files
+*.bak
+
