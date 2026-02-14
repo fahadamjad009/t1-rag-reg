@@ -1,5 +1,9 @@
-{"q": "What is KYC?", "must_include": ["austrac_www_austrac_gov_au_business_new_to_austrac_your_obligations", "austrac_www_austrac_gov_au_business_new_to_austrac_who_and_what_we_regulate"]}
-{"q": "Why is AML required?", "must_include": ["austrac_www_austrac_gov_au_business_core_guidance_amlctf_programs"]}
-{"q": "Who regulates financial crime in Australia?", "must_include": ["austrac_www_austrac_gov_au_business_new_to_austrac_who_and_what_we_regulate", "austrac_www_austrac_gov_au_work_with_austrac"]}
-{"q": "What customer identification procedures are required?", "must_include": ["austrac_www_austrac_gov_au_business_core_guidance_amlctf_programs", "austrac_www_austrac_gov_au_business_new_to_austrac_your_obligations"]}
-{"q": "What penalties apply for AML breaches?", "must_include": ["austrac_www_austrac_gov_au_business_new_to_austrac_your_obligations"]}
+{"q":"What is KYC?","must_include":["austrac_www_austrac_gov_au_business_core_guidance_customer_identification_and_verification_customer_identification_know_your_customer_kyc","austrac_www_austrac_gov_au_business_core_guidance_customer_identification_and_verification_customer_identification_and_verification_easy_reference_guide"]}
+
+{"q":"Why is AML required?","must_include":["austrac_www_austrac_gov_au_business_core_guidance_amlctf_programs"]}
+
+{"q":"Who regulates financial crime in Australia?","must_include":["austrac_www_austrac_gov_au_business_new_to_austrac_who_and_what_we_regulate","austrac_www_austrac_gov_au_work_with_austrac"]}
+
+{"q":"What customer identification procedures are required?","must_include":["austrac_www_austrac_gov_au_business_core_guidance_customer_identification_and_verification","austrac_www_austrac_gov_au_business_core_guidance_customer_identification_and_verification_customer_identification_and_verification_easy_reference_guide"]}
+
+{"q":"What penalties apply for AML breaches?","must_include":["austrac_www_austrac_gov_au_business_core_guidance_consequences_not_complying"]}

@@ -3,11 +3,14 @@
     "id": "dce_001",
     "query": "What are AUSTRAC obligations for digital currency exchange providers?",
     "must_include": [
+      "enrol",
+      "register",
       "registered with AUSTRAC",
       "registration"
     ],
     "expected_sources": [
-      "austrac.gov.au/business/your-industry/digital-currency-cryptocurrency/digital-currency-exchange-providers"
+      "austrac.gov.au/business/new-to-austrac/your-obligations",
+      "austrac.gov.au/business/new-to-austrac/check-if-you-need-enrol-or-register"
     ]
   },
   {
@@ -15,20 +18,25 @@
     "query": "What is KYC and why is it required?",
     "must_include": [
       "customer identification",
-      "verify"
+      "verify",
+      "KYC"
     ],
     "expected_sources": [
-      "austrac.gov.au"
+      "austrac.gov.au/business/core-guidance/customer-identification-and-verification",
+      "austrac.gov.au/business/new-to-austrac/your-obligations"
     ]
   },
   {
     "id": "amlctf_001",
     "query": "What is an AML/CTF program and who needs one?",
     "must_include": [
-      "AML/CTF program"
+      "AML/CTF program",
+      "risk",
+      "procedures"
     ],
     "expected_sources": [
-      "austrac.gov.au"
+      "austrac.gov.au/business/core-guidance/amlctf-programs",
+      "austrac.gov.au/business/new-to-austrac/your-obligations"
     ]
   },
   {
@@ -36,21 +44,25 @@
     "query": "When do businesses need to submit a suspicious matter report (SMR) to AUSTRAC?",
     "must_include": [
       "suspicious matter",
-      "report"
+      "report",
+      "SMR"
     ],
     "expected_sources": [
-      "austrac.gov.au"
+      "austrac.gov.au/business/core-guidance/reporting"
     ]
   },
   {
     "id": "remittance_001",
     "query": "What obligations apply to remittance service providers under AUSTRAC?",
     "must_include": [
+      "enrol",
+      "register",
       "registered",
-      "enrol"
+      "remittance"
     ],
     "expected_sources": [
-      "austrac.gov.au"
+      "austrac.gov.au/business/new-to-austrac/your-obligations",
+      "austrac.gov.au/business/new-to-austrac/check-if-you-need-enrol-or-register"
     ]
   }
 ]

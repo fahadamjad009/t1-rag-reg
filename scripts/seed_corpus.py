@@ -17,8 +17,12 @@ from bs4 import BeautifulSoup
 
 
 # ----------------------------
-# Corpus v0 (locked sources)
+# Corpus v0.1 (still "locked", but now target-complete)
 # ----------------------------
+# Key upgrade:
+# - We explicitly seed "penalties / enforcement" + registration/enrol pages
+# - We avoid crawling low-signal hubs (your-industry, news, forms, etc.)
+# - Optional: include Federal Register of Legislation for explicit penalty sections
 SOURCES = [
     {
         "source_group": "apra",
@@ -26,19 +30,38 @@ SOURCES = [
             "https://www.apra.gov.au/prudential-policy",
         ],
         "allow_domains": ["www.apra.gov.au", "apra.gov.au"],
-        "max_pages": 25,
+        "max_pages": 30,
     },
     {
         "source_group": "austrac",
         "start_urls": [
-            # ✅ seed the exact pages your eval questions reference
+            # Core "must_include" sources you already use
             "https://www.austrac.gov.au/business/new-to-austrac/your-obligations",
             "https://www.austrac.gov.au/business/new-to-austrac/who-and-what-we-regulate",
-            "https://www.austrac.gov.au/business/core-guidance/amlctf-programs",
+            "https://www.austrac.gov.au/business/new-to-austrac/check-if-you-need-enrol-or-register",
             "https://www.austrac.gov.au/work-with-austrac",
+
+            # Core guidance pages (high-signal)
+            "https://www.austrac.gov.au/business/core-guidance/amlctf-programs",
+            "https://www.austrac.gov.au/business/core-guidance/customer-identification-and-verification",
+            "https://www.austrac.gov.au/business/core-guidance/reporting",
         ],
         "allow_domains": ["www.austrac.gov.au", "austrac.gov.au"],
-        "max_pages": 40,  # bump a bit since we added multiple start pages
+        "max_pages": 60,
+    },
+
+    # ✅ NEW (optional but strongly recommended):
+    # If you want “penalties apply for AML breaches?” to be answerable,
+    # you likely need legislative text in your corpus.
+    # This keeps your project "public sources only" and still auditable.
+    {
+        "source_group": "legislation",
+        "start_urls": [
+            # AML/CTF Act landing (contains offence/civil penalty references and navigation)
+            "https://www.legislation.gov.au/Series/C2006A000169",
+        ],
+        "allow_domains": ["www.legislation.gov.au", "legislation.gov.au"],
+        "max_pages": 20,
     },
 ]
 
@@ -54,14 +77,42 @@ RAW_DIR = DATA_DIR / "corpus" / "raw"
 META_DIR = DATA_DIR / "corpus" / "meta"
 
 
+# -------------------------------------------------------
+# URL include/exclude controls
+# -------------------------------------------------------
+# These prevent wasting page budget on low-signal hubs / non-content.
+# We already learned you filter low quality later; do it here too.
+EXCLUDE_URL_SUBSTRINGS = [
+    "/business/your-industry",               # you already hard-filter this downstream
+    "/news-and-media",
+    "/inbrief",
+    "/form",
+    "/forms",
+    "/media",
+    "/subscribe",
+    "/contact-us",
+    "/careers",
+    "/search",
+    "mailto:",
+    "tel:",
+]
+
+# Optional "must-stay" guard for AUSTRAC: keep crawl in these content areas
+AUSTRAC_INCLUDE_PREFIXES = (
+    "https://www.austrac.gov.au/business/core-guidance/",
+    "https://www.austrac.gov.au/business/new-to-austrac/",
+    "https://www.austrac.gov.au/work-with-austrac",
+)
+
+
 @dataclass
 class Page:
     url: str
     title: str
     text: str
     fetched_at: str
-    source_id: str          # ✅ per-page source_id
-    source_group: str       # ✅ group label: apra/austrac
+    source_id: str          # per-page source_id
+    source_group: str       # apra/austrac/legislation
 
 
 def _is_allowed(url: str, allow_domains: List[str]) -> bool:
@@ -73,7 +124,6 @@ def _is_allowed(url: str, allow_domains: List[str]) -> bool:
 
 
 def _canonicalize(url: str) -> str:
-    # remove fragments, keep query (some sites use it meaningfully)
     u = urlparse(url)
     return u._replace(fragment="").geturl()
 
@@ -85,16 +135,12 @@ def _sha256(s: str) -> str:
 def _clean_text(html: str) -> Tuple[str, str]:
     soup = BeautifulSoup(html, "html.parser")
 
-    # remove noisy tags
     for tag in soup(["script", "style", "noscript"]):
         tag.decompose()
 
     title = (soup.title.get_text(" ", strip=True) if soup.title else "").strip()
 
-    # get visible text
     text = soup.get_text(" ", strip=True)
-
-    # normalize whitespace
     text = re.sub(r"\s+", " ", text).strip()
 
     return title, text
@@ -121,7 +167,7 @@ def _slugify(s: str) -> str:
 
 def url_to_source_id(url: str, prefix: str) -> str:
     """
-    Build a stable source_id like:
+    Build stable source_id like:
       austrac_www_austrac_gov_au_business_new_to_austrac_your_obligations
     """
     u = urlparse(url)
@@ -132,8 +178,21 @@ def url_to_source_id(url: str, prefix: str) -> str:
     return f"{prefix}_{host}_{path}"
 
 
+def _should_skip_url(url: str, source_group: str) -> bool:
+    u = (url or "").lower()
+    for sub in EXCLUDE_URL_SUBSTRINGS:
+        if sub.lower() in u:
+            return True
+
+    # For AUSTRAC, keep crawl focused in known content regions.
+    if source_group == "austrac":
+        if not url.startswith(AUSTRAC_INCLUDE_PREFIXES):
+            return True
+
+    return False
+
+
 def fetch_url(url: str) -> Optional[Tuple[str, str]]:
-    """Return (final_url, html) or None."""
     try:
         r = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT, allow_redirects=True)
         r.raise_for_status()
@@ -163,6 +222,9 @@ def crawl_source(
         if not _is_allowed(url, allow_domains):
             continue
 
+        if _should_skip_url(url, source_group=source_group):
+            continue
+
         res = fetch_url(url)
         if not res:
             continue
@@ -170,25 +232,35 @@ def crawl_source(
 
         title, text = _clean_text(html)
 
-        # always enqueue links (even if we skip text)
+        # enqueue links
         links = _extract_links(final_url, html)
         for link in links:
-            if link not in seen and _is_allowed(link, allow_domains):
-                queue.append(link)
+            if link in seen:
+                continue
+            if not _is_allowed(link, allow_domains):
+                continue
+            if _should_skip_url(link, source_group=source_group):
+                continue
+            queue.append(link)
 
-        # skip ultra-short pages (often nav/landing)
+        # skip ultra-short pages
         if len(text) < 400:
             time.sleep(SLEEP_SECONDS)
             continue
 
         fetched_at = datetime.now(timezone.utc).isoformat()
+        sid = url_to_source_id(final_url, prefix=source_group)
 
-        # ✅ per-page source_id derived from URL
-        prefix = source_group  # "austrac" or "apra"
-        sid = url_to_source_id(final_url, prefix=prefix)
-
-        pages.append(Page(url=final_url, title=title, text=text, fetched_at=fetched_at,
-                          source_id=sid, source_group=source_group))
+        pages.append(
+            Page(
+                url=final_url,
+                title=title,
+                text=text,
+                fetched_at=fetched_at,
+                source_id=sid,
+                source_group=source_group,
+            )
+        )
         print(f"[OK] ({len(pages)}/{max_pages}) {source_group}: {final_url} -> {sid}")
 
         time.sleep(SLEEP_SECONDS)
@@ -210,8 +282,8 @@ def write_pages(pages: List[Page]) -> None:
 
         meta = {
             "doc_id": doc_id,
-            "source_group": p.source_group,  # ✅ group label
-            "source_id": p.source_id,         # ✅ per-page id (used by retriever/eval)
+            "source_group": p.source_group,
+            "source_id": p.source_id,
             "url": p.url,
             "title": p.title,
             "fetched_at": p.fetched_at,
