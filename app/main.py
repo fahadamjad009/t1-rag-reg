@@ -11,7 +11,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.rag.answer import answer_extractive
+# ✅ SWITCH: use your new extractive engine (Phase 3A)
+from app.rag.extractive import answer_from_hits
 from app.rag.calibration import calibrate_best, explain_calibration
 from app.rag.retriever import retrieve
 
@@ -69,6 +70,10 @@ class QueryReq(BaseModel):
     q: str
     top_k: int = 5
     mode: str | None = None
+    # ✅ optional knobs (useful for eval + debugging)
+    must_include: list[str] | None = None
+    max_citations: int | None = 5
+    max_sentences: int | None = 2
 
 
 @app.get("/health")
@@ -187,6 +192,7 @@ def _refusal(
     citations: list | None = None,
     evidence: list[dict] | None = None,
     calibrated_confidence: float | None = None,
+    strict_fail_closed: bool | None = None,
 ):
     """
     PowerShell-friendly refusal:
@@ -203,7 +209,7 @@ def _refusal(
         "stage": stage,
         "mode": mode,
         "best_score": float(best) if best is not None else None,
-        "strict_fail_closed": STRICT_FAIL_CLOSED,
+        "strict_fail_closed": bool(strict_fail_closed) if strict_fail_closed is not None else STRICT_FAIL_CLOSED,
         "top_k": int(top_k),
         "answer": None,
         "confidence": float(confidence),
@@ -230,6 +236,7 @@ def _ok(
     citations: list,
     evidence: list[dict],
     calibrated_confidence: float | None = None,
+    strict_fail_closed: bool | None = None,
 ):
     return _json_response(
         status_code=200,
@@ -238,7 +245,7 @@ def _ok(
             "stage": stage,
             "mode": mode,
             "best_score": float(best) if best is not None else None,
-            "strict_fail_closed": STRICT_FAIL_CLOSED,
+            "strict_fail_closed": bool(strict_fail_closed) if strict_fail_closed is not None else STRICT_FAIL_CLOSED,
             "top_k": int(top_k),
             "answer": answer,
             "confidence": float(confidence),
@@ -250,6 +257,39 @@ def _ok(
             "calibration_ranges": explain_calibration(),
         },
     )
+
+
+def _run_extractive_from_payload(*, q: str, hits: list[dict], payload: dict) -> dict:
+    """
+    ✅ Centralizes the new extractive call, so /query and /answer behave identically.
+    """
+    must_include = payload.get("must_include")
+    if must_include is not None and not isinstance(must_include, list):
+        must_include = None
+
+    max_citations = payload.get("max_citations", 5)
+    try:
+        max_citations = int(max_citations)
+    except Exception:
+        max_citations = 5
+
+    max_sentences = payload.get("max_sentences", 2)
+    try:
+        max_sentences = int(max_sentences)
+    except Exception:
+        max_sentences = 2
+
+    # answer_from_hits returns: {answer, citations, strict_fail_closed, ...}
+    ex = answer_from_hits(
+        query=q,
+        hits=hits,
+        max_sentences=max_sentences,
+        must_include=must_include,
+        max_citations=max_citations,
+    )
+    if not isinstance(ex, dict):
+        ex = {"answer": "", "citations": [], "strict_fail_closed": True}
+    return ex
 
 
 @app.post("/query")
@@ -272,20 +312,34 @@ def query(req: QueryReq):
             calibrated_confidence=calib_conf,
         )
 
-    ex = answer_extractive(q, hits)
+    payload_like = {
+        "must_include": req.must_include,
+        "max_citations": req.max_citations,
+        "max_sentences": req.max_sentences,
+    }
+    ex = _run_extractive_from_payload(q=q, hits=hits, payload=payload_like)
 
-    if (not ex.answer) or (float(ex.confidence) < float(MIN_EXTRACTIVE_CONF)):
+    ex_answer = ex.get("answer") or ""
+    ex_conf = float(ex.get("confidence", 1.0))  # if your extractive doesn't output confidence, default high
+    ex_rationale = ex.get("rationale", "extractive_answer_from_hits")
+    ex_cits = ex.get("citations") or []
+    ex_evidence = ex.get("evidence") or []
+    ex_strict = bool(ex.get("strict_fail_closed", False))
+
+    if (not ex_answer) or (ex_conf < float(MIN_EXTRACTIVE_CONF)) or (ex_strict is True):
+        # If strict_fail_closed=True, treat as refusal (reg-grade)
         return _refusal(
-            reason="insufficient_extractive_confidence",
+            reason="insufficient_extractive_confidence" if not ex_strict else "no_grounded_definition_or_fail_closed",
             stage="extractive",
             mode=mode,
             best=best,
             top_k=top_k,
-            confidence=float(ex.confidence),
-            rationale=ex.rationale,
-            citations=ex.citations,
-            evidence=_truncate_evidence((ex.evidence or [])[:5]),
+            confidence=float(ex_conf),
+            rationale=str(ex_rationale) if ex_rationale else None,
+            citations=ex_cits,
+            evidence=_truncate_evidence((ex_evidence or [])[:5]),
             calibrated_confidence=calib_conf,
+            strict_fail_closed=ex_strict,
         )
 
     return _ok(
@@ -293,12 +347,13 @@ def query(req: QueryReq):
         mode=mode,
         best=best,
         top_k=top_k,
-        answer=ex.answer,
-        confidence=float(ex.confidence),
-        rationale=ex.rationale,
-        citations=ex.citations,
-        evidence=_truncate_evidence((ex.evidence or [])[:5]),
+        answer=ex_answer,
+        confidence=float(ex_conf),
+        rationale=str(ex_rationale) if ex_rationale else None,
+        citations=ex_cits,
+        evidence=_truncate_evidence((ex_evidence or [])[:5]),
         calibrated_confidence=calib_conf,
+        strict_fail_closed=ex_strict,
     )
 
 
@@ -322,20 +377,28 @@ def answer_endpoint(payload: dict):
             calibrated_confidence=calib_conf,
         )
 
-    ex = answer_extractive(q, hits)
+    ex = _run_extractive_from_payload(q=q, hits=hits, payload=payload)
 
-    if (not ex.answer) or (float(ex.confidence) < float(MIN_EXTRACTIVE_CONF)):
+    ex_answer = ex.get("answer") or ""
+    ex_conf = float(ex.get("confidence", 1.0))  # if not provided by extractive, default high
+    ex_rationale = ex.get("rationale", "extractive_answer_from_hits")
+    ex_cits = ex.get("citations") or []
+    ex_evidence = ex.get("evidence") or []
+    ex_strict = bool(ex.get("strict_fail_closed", False))
+
+    if (not ex_answer) or (ex_conf < float(MIN_EXTRACTIVE_CONF)) or (ex_strict is True):
         return _refusal(
-            reason="insufficient_extractive_confidence",
+            reason="insufficient_extractive_confidence" if not ex_strict else "no_grounded_definition_or_fail_closed",
             stage="extractive",
             mode=mode,
             best=best,
             top_k=top_k,
-            confidence=float(ex.confidence),
-            rationale=ex.rationale,
-            citations=ex.citations,
-            evidence=_truncate_evidence((ex.evidence or [])[:5]),
+            confidence=float(ex_conf),
+            rationale=str(ex_rationale) if ex_rationale else None,
+            citations=ex_cits,
+            evidence=_truncate_evidence((ex_evidence or [])[:5]),
             calibrated_confidence=calib_conf,
+            strict_fail_closed=ex_strict,
         )
 
     return _ok(
@@ -343,12 +406,13 @@ def answer_endpoint(payload: dict):
         mode=mode,
         best=best,
         top_k=top_k,
-        answer=ex.answer,
-        confidence=float(ex.confidence),
-        rationale=ex.rationale,
-        citations=ex.citations,
-        evidence=_truncate_evidence((ex.evidence or [])[:5]),
+        answer=ex_answer,
+        confidence=float(ex_conf),
+        rationale=str(ex_rationale) if ex_rationale else None,
+        citations=ex_cits,
+        evidence=_truncate_evidence((ex_evidence or [])[:5]),
         calibrated_confidence=calib_conf,
+        strict_fail_closed=ex_strict,
     )
 
 
