@@ -215,7 +215,7 @@ app/tests/test_import_eval.py::test_import_calibration       PASSED
 app/tests/test_import_eval.py::test_import_query_rewrite     PASSED
 ```
 
-CI runs lint (ruff + black) and tests on every push via GitHub Actions.
+CI runs tests on every push via GitHub Actions. Lint (ruff + black) is available locally via `make lint`.
 
 ---
 
