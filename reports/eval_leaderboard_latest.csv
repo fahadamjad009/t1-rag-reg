@@ -1,4 +1,4 @@
-file,mode,recall@1,recall@3,recall@5,recall@10,mrr@10,ndcg@10
-eval_report_bm25_20260208_154758.json,bm25,0.0,0.0,0.0,0.0,0.0,0.0
-eval_report_hybrid_rrf_20260208_154830.json,hybrid_rrf,0.0,0.0,0.0,0.0,0.0,0.0
-eval_report_vector_20260208_172416.json,vector,0.2,0.3,0.7,0.7,0.39,0.460368371922853
+mode,recall@1,recall@3,recall@5,recall@10,mrr@10,ndcg@10
+vector,0.2,0.2,0.3,0.4,0.4,0.3335748991777398
+bm25,0.0,0.4,0.5,0.5,0.21666666666666665,0.29149890523797234
+hybrid_rrf,0.0,0.3,0.4,1.0,0.29357142857142854,0.47281678698918556

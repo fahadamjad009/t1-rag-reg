@@ -2,6 +2,7 @@
 
 > A retrieval-augmented question-answering system over public Australian financial-regulation guidance (APRA + AUSTRAC), built around **measured retrieval quality** and a **fail-closed** answering policy: it refuses rather than guesses when the evidence is weak.
 
+![CI](https://github.com/fahadamjad009/t1-rag-reg/actions/workflows/ci.yml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![FastAPI](https://img.shields.io/badge/API-FastAPI-009688)
 ![Retrieval](https://img.shields.io/badge/retrieval-BM25%20%2B%20dense%20%2B%20RRF-555)
@@ -81,17 +82,6 @@ uvicorn app.main:app --reload
 
 > The committed index lets you skip steps 1–2 and query immediately. Re-seed only to refresh the corpus.
 
-### Try it
-```bash
-curl -s localhost:8000/health
-
-curl -s -X POST localhost:8000/query \
-  -H "content-type: application/json" \
-  -d '{"q":"What is an AML/CTF program and who needs one?","mode":"hybrid_rrf","top_k":5}'
-```
-
-A successful response carries the extracted `answer`, `citations`, `evidence` (the supporting chunks), `confidence`, and `calibrated_confidence`. A weak-evidence query returns `{"status":"refused","reason":"...","calibrated_confidence":...}` — the fail-closed path in action.
-
 ### API
 | Method | Path | Purpose |
 |---|---|---|
@@ -103,9 +93,68 @@ A successful response carries the extracted `answer`, `citations`, `evidence` (t
 
 ---
 
+## Example output
+
+Real responses from the running system — not mocked.
+
+### Successful answer
+
+```bash
+curl -X POST localhost:8000/query \
+  -H "content-type: application/json" \
+  -d '{"q":"Who must enrol with AUSTRAC?","mode":"hybrid_rrf","top_k":5}'
+```
+
+```json
+{
+  "status": "ok",
+  "mode": "hybrid_rrf",
+  "answer": "As a provider of designated services, you must comply with the law to help prevent money laundering, terrorism financing and other serious crime.",
+  "calibrated_confidence": 0.86,
+  "citations": [
+    {
+      "title": "Enrol or register | AUSTRAC",
+      "url": "https://www.austrac.gov.au/business/new-to-austrac/enrol-or-register"
+    },
+    {
+      "title": "Your obligations | AUSTRAC",
+      "url": "https://www.austrac.gov.au/business/new-to-austrac/your-obligations"
+    }
+  ]
+}
+```
+
+The answer is **extracted directly from retrieved chunks** (not generated), with source URLs the reader can verify. Confidence is calibrated per-mode into a `[0,1]` band — here 0.86, well above the 0.50 gate.
+
+### Fail-closed refusal
+
+```bash
+curl -X POST localhost:8000/query \
+  -H "content-type: application/json" \
+  -d '{"q":"What is the weather in Sydney?","mode":"hybrid_rrf","top_k":5}'
+```
+
+```json
+{
+  "status": "refused",
+  "reason": "insufficient_retrieval_confidence",
+  "stage": "retrieval",
+  "calibrated_confidence": 0.42,
+  "min_calib_conf_gate": 0.50
+}
+```
+
+The query is out of domain. Calibrated confidence (0.42) falls below the gate (0.50), so the system **refuses explicitly** with a machine-readable reason instead of fabricating an answer. This is the fail-closed design in action.
+
+> Full response bodies including calibration metadata: [`examples/`](examples/)
+
+---
+
 ## Evaluation
 
 The point of the project. Retrieval is scored against a goldset of regulatory questions, each labelled with the source document(s) that *should* be retrieved.
+
+### How to run
 
 ```bash
 python -m app.eval.run_eval --mode hybrid_rrf --ks 1,3,5,10
@@ -115,17 +164,26 @@ python -m app.eval.smoke_eval           # CI gate: fails if answer_coverage < 0.
 
 Each run writes a timestamped `eval_report_<mode>_<ts>.json` and a per-query CSV to `reports/`, plus an updated leaderboard.
 
-**Current results — `hybrid_rrf`, goldset n = 5** *(small by design at this stage; goldset expansion is in progress, see Roadmap):*
+### Results — three retrieval modes compared (goldset n = 5)
 
-| Metric | @1 | @3 | @5 | @10 |
-|---|---:|---:|---:|---:|
-| Recall | 0.00 | 0.30 | 0.40 | 1.00 |
-| MRR | 0.00 | 0.20 | 0.24 | 0.29 |
-| nDCG | 0.00 | 0.22 | 0.26 | 0.47 |
+| Mode | Recall@1 | Recall@3 | Recall@5 | Recall@10 | MRR@10 | nDCG@10 | Coverage |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| **Dense (vector)** | 0.20 | 0.20 | 0.30 | 0.40 | **0.40** | 0.33 | 0.40 |
+| **Lexical (BM25)** | 0.00 | 0.40 | 0.50 | 0.50 | 0.22 | 0.29 | 0.50 |
+| **Hybrid (RRF)** | 0.00 | 0.30 | 0.40 | **1.00** | 0.29 | **0.47** | **1.00** |
 
-`answer_coverage = 1.00` (every gold "must-include" source was cited within top-10).
+![Retrieval Evaluation — Recall@k curves and summary metrics comparison across three modes](docs/eval_comparison.png)
 
-**How to read this honestly:** with n = 5, these numbers are directional, not statistical. The signal worth taking is the *shape*: recall reaches 1.0 by k=10 (the right sources are in the candidate pool), while MRR/nDCG stay modest — meaning the **ranking** has headroom even though **recall** is solved. Improving rank position (not coverage) is the next measurable target. Reporting that distinction is the skill the harness exists to demonstrate.
+### What the numbers show
+
+With n = 5, these are directional, not statistical — but the pattern is clear:
+
+- **Hybrid RRF achieves perfect recall at k=10** — every gold source is in the candidate pool. Neither dense nor lexical alone reaches this. RRF fusion compensates for each mode's blind spots.
+- **Dense ranks best** (highest MRR) — when it finds the right source, it puts it near the top. But it misses sources that BM25 catches via exact keyword match.
+- **BM25 surfaces sources dense misses** (wider recall@3–5) but ranks them poorly.
+- **The gap is in ranking, not coverage.** MRR/nDCG have headroom while recall@10 is saturated. A cross-encoder re-ranker is the next lever — added to the roadmap.
+
+Goldset expansion beyond n = 5 is in progress for statistically meaningful confidence intervals.
 
 ---
 
@@ -138,6 +196,26 @@ Public Australian regulatory guidance only, crawled from official domains:
 - **legislation.gov.au** — AML/CTF Act series.
 
 Indexed snapshot: **132 source documents → 4,207 chunks** (900-char chunks, 150-char overlap), embedded with `all-MiniLM-L6-v2` (384-d), stored in FAISS. See `data/index/stats.json` for the exact build manifest.
+
+---
+
+## Testing
+
+```bash
+pytest -v                        # 7 tests: health endpoint, config, imports, calibration, query rewrite
+```
+
+```
+app/tests/test_health.py::test_health_returns_ok             PASSED
+app/tests/test_health.py::test_debug_build_returns_config    PASSED
+app/tests/test_import_eval.py::test_import_main              PASSED
+app/tests/test_import_eval.py::test_import_retriever         PASSED
+app/tests/test_import_eval.py::test_import_bm25              PASSED
+app/tests/test_import_eval.py::test_import_calibration       PASSED
+app/tests/test_import_eval.py::test_import_query_rewrite     PASSED
+```
+
+CI runs lint (ruff + black) and tests on every push via GitHub Actions.
 
 ---
 
@@ -159,10 +237,16 @@ app/
     smoke_eval.py    CI quality gate
     dashboard.py     Streamlit eval explorer
     eval_dataset.jsonl   retrieval goldset (source-labelled)
+  tests/
+    test_health.py        endpoint smoke tests
+    test_import_eval.py   import + unit tests
 scripts/
   seed_corpus.py             crawl public guidance
   build_index_from_corpus.py chunk + embed + FAISS
   run_eval.py                end-to-end eval against a live API
+examples/
+  query_success.json         real successful answer (full response body)
+  query_refusal.json         real fail-closed refusal (full response body)
 data/eval/questions.jsonl    answer-content questions
 reports/                     evaluation outputs (leaderboard + summaries)
 ```

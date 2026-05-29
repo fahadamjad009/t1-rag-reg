@@ -1,0 +1,164 @@
+{
+  "status": "ok",
+  "stage": "extractive",
+  "mode": "hybrid_rrf",
+  "best_score": 0.6779934763908386,
+  "strict_fail_closed": false,
+  "top_k": 5,
+  "answer": "Enrol, register or create an online account You must sign As a provider of designated services, you must comply with the law to help prevent money laundering, terrorism financing and other serious crime.",
+  "confidence": 1.0,
+  "rationale": "ok",
+  "citations": [
+    {
+      "rank": 1,
+      "source_id": "austrac_www_austrac_gov_au_business_new_to_austrac_enrol_or_register",
+      "doc_id": null,
+      "chunk_id": "399a1a65650c9027ac3ca121b0e9afe8f4704ad859007a9ee3824272aa95e404_0022",
+      "title": "Enrol or register | AUSTRAC",
+      "url": "https://www.austrac.gov.au/business/new-to-austrac/enrol-or-register",
+      "evidence": "Enrol, register or create an online account You must sign",
+      "is_must": false
+    },
+    {
+      "rank": 2,
+      "source_id": "austrac_www_austrac_gov_au_business_new_to_austrac_your_obligations",
+      "doc_id": null,
+      "chunk_id": "e006fe1c27d036ab691d7a3a4d5c62bf8f4836423d6655a81d91f18877a1b2e1_0022",
+      "title": "Your obligations | AUSTRAC",
+      "url": "https://www.austrac.gov.au/business/new-to-austrac/your-obligations",
+      "evidence": "As a provider of designated services, you must comply with the law to help prevent money laundering, terrorism financing and other serious crime.",
+      "is_must": false
+    }
+  ],
+  "evidence": [],
+  "calibrated_confidence": 0.8619972041675023,
+  "min_calib_conf_gate": 0.5,
+  "calibration_ranges": {
+    "vector": [
+      {
+        "raw": [
+          0.0,
+          0.3
+        ],
+        "calib": [
+          0.0,
+          0.2
+        ]
+      },
+      {
+        "raw": [
+          0.3,
+          0.45
+        ],
+        "calib": [
+          0.2,
+          0.45
+        ]
+      },
+      {
+        "raw": [
+          0.45,
+          0.6
+        ],
+        "calib": [
+          0.45,
+          0.7
+        ]
+      },
+      {
+        "raw": [
+          0.6,
+          1.0
+        ],
+        "calib": [
+          0.7,
+          1.0
+        ]
+      }
+    ],
+    "bm25": [
+      {
+        "raw": [
+          0.0,
+          3.0
+        ],
+        "calib": [
+          0.0,
+          0.2
+        ]
+      },
+      {
+        "raw": [
+          3.0,
+          6.0
+        ],
+        "calib": [
+          0.2,
+          0.45
+        ]
+      },
+      {
+        "raw": [
+          6.0,
+          10.0
+        ],
+        "calib": [
+          0.45,
+          0.75
+        ]
+      },
+      {
+        "raw": [
+          10.0,
+          30.0
+        ],
+        "calib": [
+          0.75,
+          1.0
+        ]
+      }
+    ],
+    "hybrid_rrf": [
+      {
+        "raw": [
+          0.0,
+          0.25
+        ],
+        "calib": [
+          0.0,
+          0.25
+        ]
+      },
+      {
+        "raw": [
+          0.25,
+          0.45
+        ],
+        "calib": [
+          0.25,
+          0.55
+        ]
+      },
+      {
+        "raw": [
+          0.45,
+          0.65
+        ],
+        "calib": [
+          0.55,
+          0.85
+        ]
+      },
+      {
+        "raw": [
+          0.65,
+          1.0
+        ],
+        "calib": [
+          0.85,
+          1.0
+        ]
+      }
+    ]
+  }
+}
