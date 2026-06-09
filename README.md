@@ -80,7 +80,6 @@ python -m scripts.build_index_from_corpus
 uvicorn app.main:app --reload
 ```
 
-> The committed index lets you skip steps 1–2 and query immediately. Re-seed only to refresh the corpus.
 
 ### API
 | Method | Path | Purpose |
